@@ -52,7 +52,7 @@ var MOUSE_MOVE = 3;
 var MOUSE_WHEEL = 4;
 
 // Parameters.
-var ROOT_NODE = document.getElementsByTagNameNS(NSS[&quot;svg&quot;], &quot;svg&quot;)[0];
+var ROOT_NODE = document.getElementsByTagNameNS(NSS["svg"], "svg")[0];
 var HEIGHT = 0;
 var WIDTH = 0;
 var INDEX_COLUMNS_DEFAULT = 4;
@@ -74,9 +74,9 @@ var processingEffect = false;
 var transCounter = 0;
 var effectArray = 0;
 var defaultTransitionInDict = new Object();
-defaultTransitionInDict[&quot;name&quot;] = &quot;appear&quot;;
+defaultTransitionInDict["name"] = "appear";
 var defaultTransitionOutDict = new Object();
-defaultTransitionOutDict[&quot;name&quot;] = &quot;appear&quot;;
+defaultTransitionOutDict["name"] = "appear";
 var jessyInkInitialised = false;
 
 // Initialise char and key code dictionaries.
@@ -100,7 +100,7 @@ var mouse_presentation_path = null;
 var mouse_last_x = -1;
 var mouse_last_y = -1;
 var mouse_min_dist_sqr = 3 * 3;
-var path_colour = &quot;red&quot;;
+var path_colour = "red";
 var path_width_default = 3;
 var path_width = path_width_default;
 var path_paint_width = path_width;
@@ -119,7 +119,7 @@ function jessyInkInit()
 		return;
 
 	// Making the presentation scaleable.
-	var VIEWBOX = ROOT_NODE.getAttribute(&quot;viewBox&quot;);
+	var VIEWBOX = ROOT_NODE.getAttribute("viewBox");
 
 	if (VIEWBOX)
 	{
@@ -128,53 +128,53 @@ function jessyInkInit()
 	}
 	else
 	{
-		HEIGHT = parseFloat(ROOT_NODE.getAttribute(&quot;height&quot;));
-		WIDTH = parseFloat(ROOT_NODE.getAttribute(&quot;width&quot;));
-		ROOT_NODE.setAttribute(&quot;viewBox&quot;, &quot;0 0 &quot; + WIDTH + &quot; &quot; + HEIGHT);
+		HEIGHT = parseFloat(ROOT_NODE.getAttribute("height"));
+		WIDTH = parseFloat(ROOT_NODE.getAttribute("width"));
+		ROOT_NODE.setAttribute("viewBox", "0 0 " + WIDTH + " " + HEIGHT);
 	}
 
-	ROOT_NODE.setAttribute(&quot;width&quot;, &quot;100%&quot;);
-	ROOT_NODE.setAttribute(&quot;height&quot;, &quot;100%&quot;);
+	ROOT_NODE.setAttribute("width", "100%");
+	ROOT_NODE.setAttribute("height", "100%");
 
 	// Setting the background color.
-	var namedViews = document.getElementsByTagNameNS(NSS[&quot;sodipodi&quot;], &quot;namedview&quot;);
+	var namedViews = document.getElementsByTagNameNS(NSS["sodipodi"], "namedview");
 
-	for (var counter = 0; counter &lt; namedViews.length; counter++)
+	for (var counter = 0; counter < namedViews.length; counter++)
 	{
-		if (namedViews[counter].hasAttribute(&quot;id&quot;) &amp;&amp; namedViews[counter].hasAttribute(&quot;pagecolor&quot;))
+		if (namedViews[counter].hasAttribute("id") && namedViews[counter].hasAttribute("pagecolor"))
 		{
-			if (namedViews[counter].getAttribute(&quot;id&quot;) == &quot;base&quot;)
+			if (namedViews[counter].getAttribute("id") == "base")
 			{
-				BACKGROUND_COLOR = namedViews[counter].getAttribute(&quot;pagecolor&quot;);
-				var newAttribute = &quot;background-color:&quot; + BACKGROUND_COLOR + &quot;;&quot;;
+				BACKGROUND_COLOR = namedViews[counter].getAttribute("pagecolor");
+				var newAttribute = "background-color:" + BACKGROUND_COLOR + ";";
 
-				if (ROOT_NODE.hasAttribute(&quot;style&quot;))
-					newAttribute += ROOT_NODE.getAttribute(&quot;style&quot;);
+				if (ROOT_NODE.hasAttribute("style"))
+					newAttribute += ROOT_NODE.getAttribute("style");
 
-				ROOT_NODE.setAttribute(&quot;style&quot;, newAttribute);
+				ROOT_NODE.setAttribute("style", newAttribute);
 			}
 		}
 	}
 
 	// Defining clip-path.
-	var defsNodes = document.getElementsByTagNameNS(NSS[&quot;svg&quot;], &quot;defs&quot;);
+	var defsNodes = document.getElementsByTagNameNS(NSS["svg"], "defs");
 
-	if (defsNodes.length &gt; 0)
+	if (defsNodes.length > 0)
 	{
-		var existingClipPath = document.getElementById(&quot;jessyInkSlideClipPath&quot;);
+		var existingClipPath = document.getElementById("jessyInkSlideClipPath");
 
 		if (!existingClipPath)
 		{
-			var rectNode = document.createElementNS(NSS[&quot;svg&quot;], &quot;rect&quot;);
-			var clipPath = document.createElementNS(NSS[&quot;svg&quot;], &quot;clipPath&quot;);
+			var rectNode = document.createElementNS(NSS["svg"], "rect");
+			var clipPath = document.createElementNS(NSS["svg"], "clipPath");
 
-			rectNode.setAttribute(&quot;x&quot;, 0);
-			rectNode.setAttribute(&quot;y&quot;, 0);
-			rectNode.setAttribute(&quot;width&quot;, WIDTH);
-			rectNode.setAttribute(&quot;height&quot;, HEIGHT);
+			rectNode.setAttribute("x", 0);
+			rectNode.setAttribute("y", 0);
+			rectNode.setAttribute("width", WIDTH);
+			rectNode.setAttribute("height", HEIGHT);
 
-			clipPath.setAttribute(&quot;id&quot;, &quot;jessyInkSlideClipPath&quot;);
-			clipPath.setAttribute(&quot;clipPathUnits&quot;, &quot;userSpaceOnUse&quot;);
+			clipPath.setAttribute("id", "jessyInkSlideClipPath");
+			clipPath.setAttribute("clipPathUnits", "userSpaceOnUse");
 
 			clipPath.appendChild(rectNode);
 			defsNodes[0].appendChild(clipPath);
@@ -182,20 +182,20 @@ function jessyInkInit()
 	}
 
 	// Making a list of the slide and finding the master slide.
-	var nodes = document.getElementsByTagNameNS(NSS[&quot;svg&quot;], &quot;g&quot;);
+	var nodes = document.getElementsByTagNameNS(NSS["svg"], "g");
 	var tempSlides = new Array();
 	var existingJessyInkPresentationLayer = null;
 
-	for (var counter = 0; counter &lt; nodes.length; counter++)
+	for (var counter = 0; counter < nodes.length; counter++)
 	{
-		if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;groupmode&quot;) &amp;&amp; (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;groupmode&quot;) == &quot;layer&quot;))
+		if (nodes[counter].getAttributeNS(NSS["inkscape"], "groupmode") && (nodes[counter].getAttributeNS(NSS["inkscape"], "groupmode") == "layer"))
 		{
-			if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;) &amp;&amp; nodes[counter].getAttributeNS(NSS[&quot;jessyink&quot;], &quot;masterSlide&quot;) == &quot;masterSlide&quot;)
+			if (nodes[counter].getAttributeNS(NSS["inkscape"], "label") && nodes[counter].getAttributeNS(NSS["jessyink"], "masterSlide") == "masterSlide")
 				masterSlide = nodes[counter];
-			else if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;) &amp;&amp; nodes[counter].getAttributeNS(NSS[&quot;jessyink&quot;], &quot;presentationLayer&quot;) == &quot;presentationLayer&quot;)
+			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label") && nodes[counter].getAttributeNS(NSS["jessyink"], "presentationLayer") == "presentationLayer")
 				existingJessyInkPresentationLayer = nodes[counter];
 			else
-				tempSlides.push(nodes[counter].getAttribute(&quot;id&quot;));
+				tempSlides.push(nodes[counter].getAttribute("id"));
 		}
 		else if (nodes[counter].getAttributeNS(NSS['jessyink'], 'element'))
 		{
@@ -206,13 +206,13 @@ function jessyInkInit()
 	// Hide master slide set default transitions.
 	if (masterSlide)
 	{
-		masterSlide.style.display = &quot;none&quot;;
+		masterSlide.style.display = "none";
 
-		if (masterSlide.hasAttributeNS(NSS[&quot;jessyink&quot;], &quot;transitionIn&quot;))
-			defaultTransitionInDict = propStrToDict(masterSlide.getAttributeNS(NSS[&quot;jessyink&quot;], &quot;transitionIn&quot;));
+		if (masterSlide.hasAttributeNS(NSS["jessyink"], "transitionIn"))
+			defaultTransitionInDict = propStrToDict(masterSlide.getAttributeNS(NSS["jessyink"], "transitionIn"));
 
-		if (masterSlide.hasAttributeNS(NSS[&quot;jessyink&quot;], &quot;transitionOut&quot;))
-			defaultTransitionOutDict = propStrToDict(masterSlide.getAttributeNS(NSS[&quot;jessyink&quot;], &quot;transitionOut&quot;));
+		if (masterSlide.hasAttributeNS(NSS["jessyink"], "transitionOut"))
+			defaultTransitionOutDict = propStrToDict(masterSlide.getAttributeNS(NSS["jessyink"], "transitionOut"));
 	}
 
 	if (existingJessyInkPresentationLayer != null)
@@ -226,117 +226,117 @@ function jessyInkInit()
 	activeSlide = hashObj.slideNumber;
 	activeEffect = hashObj.effectNumber;
 
-	if (activeSlide &lt; 0)
+	if (activeSlide < 0)
 		activeSlide = 0;
-	else if (activeSlide &gt;= tempSlides.length)
+	else if (activeSlide >= tempSlides.length)
 		activeSlide = tempSlides.length - 1;
 
 	var originalNode = document.getElementById(tempSlides[counter]);
 
-	var JessyInkPresentationLayer = document.createElementNS(NSS[&quot;svg&quot;], &quot;g&quot;);
-	JessyInkPresentationLayer.setAttributeNS(NSS[&quot;inkscape&quot;], &quot;groupmode&quot;, &quot;layer&quot;);
-	JessyInkPresentationLayer.setAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;, &quot;JessyInk Presentation Layer&quot;);
-	JessyInkPresentationLayer.setAttributeNS(NSS[&quot;jessyink&quot;], &quot;presentationLayer&quot;, &quot;presentationLayer&quot;);
-	JessyInkPresentationLayer.setAttribute(&quot;id&quot;, &quot;jessyink_presentation_layer&quot;);
-	JessyInkPresentationLayer.style.display = &quot;inherit&quot;;
+	var JessyInkPresentationLayer = document.createElementNS(NSS["svg"], "g");
+	JessyInkPresentationLayer.setAttributeNS(NSS["inkscape"], "groupmode", "layer");
+	JessyInkPresentationLayer.setAttributeNS(NSS["inkscape"], "label", "JessyInk Presentation Layer");
+	JessyInkPresentationLayer.setAttributeNS(NSS["jessyink"], "presentationLayer", "presentationLayer");
+	JessyInkPresentationLayer.setAttribute("id", "jessyink_presentation_layer");
+	JessyInkPresentationLayer.style.display = "inherit";
 	ROOT_NODE.appendChild(JessyInkPresentationLayer);
 
 	// Gathering all the information about the transitions and effects of the slides, set the background
 	// from the master slide and substitute the auto-texts.
-	for (var counter = 0; counter &lt; tempSlides.length; counter++)
+	for (var counter = 0; counter < tempSlides.length; counter++)
 	{
 		var originalNode = document.getElementById(tempSlides[counter]);
-		originalNode.style.display = &quot;none&quot;;
-		var node = suffixNodeIds(originalNode.cloneNode(true), &quot;_&quot; + counter);
+		originalNode.style.display = "none";
+		var node = suffixNodeIds(originalNode.cloneNode(true), "_" + counter);
 		JessyInkPresentationLayer.appendChild(node);
 		slides[counter] = new Object();
-		slides[counter][&quot;original_element&quot;] = originalNode;
-		slides[counter][&quot;element&quot;] = node;
+		slides[counter]["original_element"] = originalNode;
+		slides[counter]["element"] = node;
 
 		// Set build in transition.
-		slides[counter][&quot;transitionIn&quot;] = new Object();
+		slides[counter]["transitionIn"] = new Object();
 
 		var dict;
 
-		if (node.hasAttributeNS(NSS[&quot;jessyink&quot;], &quot;transitionIn&quot;))
-			dict = propStrToDict(node.getAttributeNS(NSS[&quot;jessyink&quot;], &quot;transitionIn&quot;));
+		if (node.hasAttributeNS(NSS["jessyink"], "transitionIn"))
+			dict = propStrToDict(node.getAttributeNS(NSS["jessyink"], "transitionIn"));
 		else
 			dict = defaultTransitionInDict;
 
-		slides[counter][&quot;transitionIn&quot;][&quot;name&quot;] = dict[&quot;name&quot;];
-		slides[counter][&quot;transitionIn&quot;][&quot;options&quot;] = new Object();
+		slides[counter]["transitionIn"]["name"] = dict["name"];
+		slides[counter]["transitionIn"]["options"] = new Object();
 
 		for (key in dict)
-			if (key != &quot;name&quot;)
-				slides[counter][&quot;transitionIn&quot;][&quot;options&quot;][key] = dict[key];
+			if (key != "name")
+				slides[counter]["transitionIn"]["options"][key] = dict[key];
 
 		// Set build out transition.
-		slides[counter][&quot;transitionOut&quot;] = new Object();
+		slides[counter]["transitionOut"] = new Object();
 
-		if (node.hasAttributeNS(NSS[&quot;jessyink&quot;], &quot;transitionOut&quot;))
-			dict = propStrToDict(node.getAttributeNS(NSS[&quot;jessyink&quot;], &quot;transitionOut&quot;));
+		if (node.hasAttributeNS(NSS["jessyink"], "transitionOut"))
+			dict = propStrToDict(node.getAttributeNS(NSS["jessyink"], "transitionOut"));
 		else
 			dict = defaultTransitionOutDict;
 
-		slides[counter][&quot;transitionOut&quot;][&quot;name&quot;] = dict[&quot;name&quot;];
-		slides[counter][&quot;transitionOut&quot;][&quot;options&quot;] = new Object();
+		slides[counter]["transitionOut"]["name"] = dict["name"];
+		slides[counter]["transitionOut"]["options"] = new Object();
 
 		for (key in dict)
-			if (key != &quot;name&quot;)
-				slides[counter][&quot;transitionOut&quot;][&quot;options&quot;][key] = dict[key];
+			if (key != "name")
+				slides[counter]["transitionOut"]["options"][key] = dict[key];
 
 		// Copy master slide content.
 		if (masterSlide)
 		{
-			var clonedNode = suffixNodeIds(masterSlide.cloneNode(true), &quot;_&quot; + counter);
-			clonedNode.removeAttributeNS(NSS[&quot;inkscape&quot;], &quot;groupmode&quot;);
-			clonedNode.removeAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;);
-			clonedNode.style.display = &quot;inherit&quot;;
+			var clonedNode = suffixNodeIds(masterSlide.cloneNode(true), "_" + counter);
+			clonedNode.removeAttributeNS(NSS["inkscape"], "groupmode");
+			clonedNode.removeAttributeNS(NSS["inkscape"], "label");
+			clonedNode.style.display = "inherit";
 
 			node.insertBefore(clonedNode, node.firstChild);
 		}
 
 		// Setting clip path.
-		node.setAttribute(&quot;clip-path&quot;, &quot;url(#jessyInkSlideClipPath)&quot;);
+		node.setAttribute("clip-path", "url(#jessyInkSlideClipPath)");
 
 		// Substitute auto texts.
-		substituteAutoTexts(node, node.getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;), counter + 1, tempSlides.length);
+		substituteAutoTexts(node, node.getAttributeNS(NSS["inkscape"], "label"), counter + 1, tempSlides.length);
 
-		node.removeAttributeNS(NSS[&quot;inkscape&quot;], &quot;groupmode&quot;);
-		node.removeAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;);
+		node.removeAttributeNS(NSS["inkscape"], "groupmode");
+		node.removeAttributeNS(NSS["inkscape"], "label");
 
 		// Set effects.
 		var tempEffects = new Array();
 		var groups = new Object();
 
-		for (var IOCounter = 0; IOCounter &lt;= 1; IOCounter++)
+		for (var IOCounter = 0; IOCounter <= 1; IOCounter++)
 		{
-			var propName = &quot;&quot;;
+			var propName = "";
 			var dir = 0;
 
 			if (IOCounter == 0)
 			{
-				propName = &quot;effectIn&quot;;
+				propName = "effectIn";
 				dir = 1;
 			}
 			else if (IOCounter == 1)
 			{
-				propName = &quot;effectOut&quot;;
+				propName = "effectOut";
 				dir = -1;
 			}
 
-			var effects = getElementsByPropertyNS(node, NSS[&quot;jessyink&quot;], propName);
+			var effects = getElementsByPropertyNS(node, NSS["jessyink"], propName);
 
-			for (var effectCounter = 0; effectCounter &lt; effects.length; effectCounter++)
+			for (var effectCounter = 0; effectCounter < effects.length; effectCounter++)
 			{
 				var element = document.getElementById(effects[effectCounter]);
-				var dict = propStrToDict(element.getAttributeNS(NSS[&quot;jessyink&quot;], propName));
+				var dict = propStrToDict(element.getAttributeNS(NSS["jessyink"], propName));
 
 				// Put every element that has an effect associated with it, into its own group.
 				// Unless of course, we already put it into its own group.
 				if (!(groups[element.id]))
 				{
-					var newGroup = document.createElementNS(NSS[&quot;svg&quot;], &quot;g&quot;);
+					var newGroup = document.createElementNS(NSS["svg"], "g");
 
 					element.parentNode.insertBefore(newGroup, element);
 					newGroup.appendChild(element.parentNode.removeChild(element));
@@ -345,82 +345,82 @@ function jessyInkInit()
 
 				var effectDict = new Object();
 
-				effectDict[&quot;effect&quot;] = dict[&quot;name&quot;];
-				effectDict[&quot;dir&quot;] = dir;
-				effectDict[&quot;element&quot;] = groups[element.id];
+				effectDict["effect"] = dict["name"];
+				effectDict["dir"] = dir;
+				effectDict["element"] = groups[element.id];
 
 				for (var option in dict)
 				{
-					if ((option != &quot;name&quot;) &amp;&amp; (option != &quot;order&quot;))
+					if ((option != "name") && (option != "order"))
 					{
-						if (!effectDict[&quot;options&quot;])
-							effectDict[&quot;options&quot;] = new Object();
+						if (!effectDict["options"])
+							effectDict["options"] = new Object();
 
-						effectDict[&quot;options&quot;][option] = dict[option];
+						effectDict["options"][option] = dict[option];
 					}
 				}
 
-				if (!tempEffects[dict[&quot;order&quot;]])
-					tempEffects[dict[&quot;order&quot;]] = new Array();
+				if (!tempEffects[dict["order"]])
+					tempEffects[dict["order"]] = new Array();
 
-				tempEffects[dict[&quot;order&quot;]][tempEffects[dict[&quot;order&quot;]].length] = effectDict;
+				tempEffects[dict["order"]][tempEffects[dict["order"]].length] = effectDict;
 			}
 		}
 
 		// Make invisible, but keep in rendering tree to ensure that bounding box can be calculated.
-		node.setAttribute(&quot;opacity&quot;,0);
-		node.style.display = &quot;inherit&quot;;
+		node.setAttribute("opacity",0);
+		node.style.display = "inherit";
 
 		// Create a transform group.
-		var transformGroup = document.createElementNS(NSS[&quot;svg&quot;], &quot;g&quot;);
+		var transformGroup = document.createElementNS(NSS["svg"], "g");
 
 		// Add content to transform group.
 		while (node.firstChild)
 			transformGroup.appendChild(node.firstChild);
 
 		// Transfer the transform attribute from the node to the transform group.
-		if (node.getAttribute(&quot;transform&quot;))
+		if (node.getAttribute("transform"))
 		{
-			transformGroup.setAttribute(&quot;transform&quot;, node.getAttribute(&quot;transform&quot;));
-			node.removeAttribute(&quot;transform&quot;);
+			transformGroup.setAttribute("transform", node.getAttribute("transform"));
+			node.removeAttribute("transform");
 		}
 
 		// Create a view group.
-		var viewGroup = document.createElementNS(NSS[&quot;svg&quot;], &quot;g&quot;);
+		var viewGroup = document.createElementNS(NSS["svg"], "g");
 
 		viewGroup.appendChild(transformGroup);
-		slides[counter][&quot;viewGroup&quot;] = node.appendChild(viewGroup);
+		slides[counter]["viewGroup"] = node.appendChild(viewGroup);
 
 		// Insert background.
 		if (BACKGROUND_COLOR != null)
 		{
-			var rectNode = document.createElementNS(NSS[&quot;svg&quot;], &quot;rect&quot;);
+			var rectNode = document.createElementNS(NSS["svg"], "rect");
 
-			rectNode.setAttribute(&quot;x&quot;, 0);
-			rectNode.setAttribute(&quot;y&quot;, 0);
-			rectNode.setAttribute(&quot;width&quot;, WIDTH);
-			rectNode.setAttribute(&quot;height&quot;, HEIGHT);
-			rectNode.setAttribute(&quot;id&quot;, &quot;jessyInkBackground&quot; + counter);
-			rectNode.setAttribute(&quot;fill&quot;, BACKGROUND_COLOR);
+			rectNode.setAttribute("x", 0);
+			rectNode.setAttribute("y", 0);
+			rectNode.setAttribute("width", WIDTH);
+			rectNode.setAttribute("height", HEIGHT);
+			rectNode.setAttribute("id", "jessyInkBackground" + counter);
+			rectNode.setAttribute("fill", BACKGROUND_COLOR);
 
-			slides[counter][&quot;viewGroup&quot;].insertBefore(rectNode, slides[counter][&quot;viewGroup&quot;].firstChild);
+			slides[counter]["viewGroup"].insertBefore(rectNode, slides[counter]["viewGroup"].firstChild);
 		}
 
 		// Set views.
 		var tempViews = new Array();
-		var views = getElementsByPropertyNS(node, NSS[&quot;jessyink&quot;], &quot;view&quot;);
+		var views = getElementsByPropertyNS(node, NSS["jessyink"], "view");
 		var matrixOld = (new matrixSVG()).fromElements(1, 0, 0, 0, 1, 0, 0, 0, 1);
 
 		// Set initial view even if there are no other views.
-		slides[counter][&quot;viewGroup&quot;].setAttribute(&quot;transform&quot;, matrixOld.toAttribute());
+		slides[counter]["viewGroup"].setAttribute("transform", matrixOld.toAttribute());
 		slides[counter].initialView = matrixOld.toAttribute();
 
-		for (var viewCounter = 0; viewCounter &lt; views.length; viewCounter++)
+		for (var viewCounter = 0; viewCounter < views.length; viewCounter++)
 		{
 			var element = document.getElementById(views[viewCounter]);
-			var dict = propStrToDict(element.getAttributeNS(NSS[&quot;jessyink&quot;], &quot;view&quot;));
+			var dict = propStrToDict(element.getAttributeNS(NSS["jessyink"], "view"));
 
-			if (dict[&quot;order&quot;] == 0)
+			if (dict["order"] == 0)
 			{
 				matrixOld = pointMatrixToTransformation(rectToMatrix(element)).mult((new matrixSVG()).fromSVGMatrix(slides[counter].viewGroup.getScreenCTM()).inv().mult((new matrixSVG()).fromSVGMatrix(element.parentNode.getScreenCTM())).inv());
 				slides[counter].initialView = matrixOld.toAttribute();
@@ -429,25 +429,25 @@ function jessyInkInit()
 			{
 				var effectDict = new Object();
 
-				effectDict[&quot;effect&quot;] = dict[&quot;name&quot;];
-				effectDict[&quot;dir&quot;] = 1;
-				effectDict[&quot;element&quot;] = slides[counter][&quot;viewGroup&quot;];
-				effectDict[&quot;order&quot;] = dict[&quot;order&quot;];
+				effectDict["effect"] = dict["name"];
+				effectDict["dir"] = 1;
+				effectDict["element"] = slides[counter]["viewGroup"];
+				effectDict["order"] = dict["order"];
 
 				for (var option in dict)
 				{
-					if ((option != &quot;name&quot;) &amp;&amp; (option != &quot;order&quot;))
+					if ((option != "name") && (option != "order"))
 					{
-						if (!effectDict[&quot;options&quot;])
-							effectDict[&quot;options&quot;] = new Object();
+						if (!effectDict["options"])
+							effectDict["options"] = new Object();
 
-						effectDict[&quot;options&quot;][option] = dict[option];
+						effectDict["options"][option] = dict[option];
 					}
 				}
 
-				effectDict[&quot;options&quot;][&quot;matrixNew&quot;] = pointMatrixToTransformation(rectToMatrix(element)).mult((new matrixSVG()).fromSVGMatrix(slides[counter].viewGroup.getScreenCTM()).inv().mult((new matrixSVG()).fromSVGMatrix(element.parentNode.getScreenCTM())).inv());
+				effectDict["options"]["matrixNew"] = pointMatrixToTransformation(rectToMatrix(element)).mult((new matrixSVG()).fromSVGMatrix(slides[counter].viewGroup.getScreenCTM()).inv().mult((new matrixSVG()).fromSVGMatrix(element.parentNode.getScreenCTM())).inv());
 
-				tempViews[dict[&quot;order&quot;]] = effectDict;
+				tempViews[dict["order"]] = effectDict;
 			}
 
 			// Remove element.
@@ -455,58 +455,58 @@ function jessyInkInit()
 		}
 
 		// Consolidate view array and append it to the effect array.
-		if (tempViews.length &gt; 0)
+		if (tempViews.length > 0)
 		{
-			for (var viewCounter = 0; viewCounter &lt; tempViews.length; viewCounter++)
+			for (var viewCounter = 0; viewCounter < tempViews.length; viewCounter++)
 			{
 				if (tempViews[viewCounter])
 				{
-					tempViews[viewCounter][&quot;options&quot;][&quot;matrixOld&quot;] = matrixOld;
-					matrixOld = tempViews[viewCounter][&quot;options&quot;][&quot;matrixNew&quot;];
+					tempViews[viewCounter]["options"]["matrixOld"] = matrixOld;
+					matrixOld = tempViews[viewCounter]["options"]["matrixNew"];
 
-					if (!tempEffects[tempViews[viewCounter][&quot;order&quot;]])
-						tempEffects[tempViews[viewCounter][&quot;order&quot;]] = new Array();
+					if (!tempEffects[tempViews[viewCounter]["order"]])
+						tempEffects[tempViews[viewCounter]["order"]] = new Array();
 
-					tempEffects[tempViews[viewCounter][&quot;order&quot;]][tempEffects[tempViews[viewCounter][&quot;order&quot;]].length] = tempViews[viewCounter];
+					tempEffects[tempViews[viewCounter]["order"]][tempEffects[tempViews[viewCounter]["order"]].length] = tempViews[viewCounter];
 				}
 			}
 		}
 
 		// Set consolidated effect array.
-		if (tempEffects.length &gt; 0)
+		if (tempEffects.length > 0)
 		{
-			slides[counter][&quot;effects&quot;] = new Array();
+			slides[counter]["effects"] = new Array();
 
-			for (var effectCounter = 0; effectCounter &lt; tempEffects.length; effectCounter++)
+			for (var effectCounter = 0; effectCounter < tempEffects.length; effectCounter++)
 			{
 				if (tempEffects[effectCounter])
-					slides[counter][&quot;effects&quot;][slides[counter][&quot;effects&quot;].length] = tempEffects[effectCounter];
+					slides[counter]["effects"][slides[counter]["effects"].length] = tempEffects[effectCounter];
 			}
 		}
 
-		node.setAttribute(&quot;onmouseover&quot;, &quot;if ((currentMode == INDEX_MODE) &amp;&amp; ( activeSlide != &quot; + counter + &quot;)) { indexSetActiveSlide(&quot; + counter + &quot;); };&quot;);
+		node.setAttribute("onmouseover", "if ((currentMode == INDEX_MODE) && ( activeSlide != " + counter + ")) { indexSetActiveSlide(" + counter + "); };");
 
 		// Set visibility for initial state.
 		if (counter == activeSlide)
 		{
-			node.style.display = &quot;inherit&quot;;
-			node.setAttribute(&quot;opacity&quot;,1);
+			node.style.display = "inherit";
+			node.setAttribute("opacity",1);
 		}
 		else
 		{
-			node.style.display = &quot;none&quot;;
-			node.setAttribute(&quot;opacity&quot;,0);
+			node.style.display = "none";
+			node.setAttribute("opacity",0);
 		}
 	}
 
 	// Set key handler.
-	var jessyInkObjects = document.getElementsByTagNameNS(NSS[&quot;svg&quot;], &quot;g&quot;);
+	var jessyInkObjects = document.getElementsByTagNameNS(NSS["svg"], "g");
 
-	for (var counter = 0; counter &lt; jessyInkObjects.length; counter++)
+	for (var counter = 0; counter < jessyInkObjects.length; counter++)
 	{
 		var elem = jessyInkObjects[counter];
 
-		if (elem.getAttributeNS(NSS[&quot;jessyink&quot;], &quot;customKeyBindings&quot;))
+		if (elem.getAttributeNS(NSS["jessyink"], "customKeyBindings"))
 		{
 			if (elem.getCustomKeyBindings != undefined)
 				keyCodeDictionary = elem.getCustomKeyBindings();
@@ -517,9 +517,9 @@ function jessyInkInit()
 	}
 
 	// Set mouse handler.
-	var jessyInkMouseHandler = document.getElementsByTagNameNS(NSS[&quot;jessyink&quot;], &quot;mousehandler&quot;);
+	var jessyInkMouseHandler = document.getElementsByTagNameNS(NSS["jessyink"], "mousehandler");
 
-	for (var counter = 0; counter &lt; jessyInkMouseHandler.length; counter++)
+	for (var counter = 0; counter < jessyInkMouseHandler.length; counter++)
 	{
 		var elem = jessyInkMouseHandler[counter];
 
@@ -539,11 +539,11 @@ function jessyInkInit()
 	}
 
 	// Check effect number.
-	if ((activeEffect &lt; 0) || (!slides[activeSlide].effects))
+	if ((activeEffect < 0) || (!slides[activeSlide].effects))
 	{
 		activeEffect = 0;
 	}
-	else if (activeEffect &gt; slides[activeSlide].effects.length)
+	else if (activeEffect > slides[activeSlide].effects.length)
 	{
 		activeEffect = slides[activeSlide].effects.length;
 	}
@@ -552,7 +552,7 @@ function jessyInkInit()
 	hideProgressBar();
 	setProgressBarValue(activeSlide);
 	setTimeIndicatorValue(0);
-	setInterval(&quot;updateTimer()&quot;, 1000);
+	setInterval("updateTimer()", 1000);
 	setSlideToState(activeSlide, activeEffect);
 	jessyInkInitialised = true;
 }
@@ -566,15 +566,15 @@ function jessyInkInit()
  */
 function substituteAutoTexts(node, slideName, slideNumber, numberOfSlides)
 {
-	var texts = node.getElementsByTagNameNS(NSS[&quot;svg&quot;], &quot;tspan&quot;);
+	var texts = node.getElementsByTagNameNS(NSS["svg"], "tspan");
 
-	for (var textCounter = 0; textCounter &lt; texts.length; textCounter++)
+	for (var textCounter = 0; textCounter < texts.length; textCounter++)
 	{
-		if (texts[textCounter].getAttributeNS(NSS[&quot;jessyink&quot;], &quot;autoText&quot;) == &quot;slideNumber&quot;)
+		if (texts[textCounter].getAttributeNS(NSS["jessyink"], "autoText") == "slideNumber")
 			texts[textCounter].firstChild.nodeValue = slideNumber;
-		else if (texts[textCounter].getAttributeNS(NSS[&quot;jessyink&quot;], &quot;autoText&quot;) == &quot;numberOfSlides&quot;)
+		else if (texts[textCounter].getAttributeNS(NSS["jessyink"], "autoText") == "numberOfSlides")
 			texts[textCounter].firstChild.nodeValue = numberOfSlides;
-		else if (texts[textCounter].getAttributeNS(NSS[&quot;jessyink&quot;], &quot;autoText&quot;) == &quot;slideTitle&quot;)
+		else if (texts[textCounter].getAttributeNS(NSS["jessyink"], "autoText") == "slideTitle")
 			texts[textCounter].firstChild.nodeValue = slideName;
 	}
 }
@@ -591,9 +591,9 @@ function getElementsByPropertyNS(node, namespace, name)
 	var elems = new Array();
 
 	if (node.getAttributeNS(namespace, name))
-		elems.push(node.getAttribute(&quot;id&quot;));
+		elems.push(node.getAttribute("id"));
 
-	for (var counter = 0; counter &lt; node.childNodes.length; counter++)
+	for (var counter = 0; counter < node.childNodes.length; counter++)
 	{
 		if (node.childNodes[counter].nodeType == 1)
 			elems = elems.concat(getElementsByPropertyNS(node.childNodes[counter], namespace, name));
@@ -608,19 +608,19 @@ function getElementsByPropertyNS(node, namespace, name)
  */
 function dispatchEffects(dir)
 {
-	if (slides[activeSlide][&quot;effects&quot;] &amp;&amp; (((dir == 1) &amp;&amp; (activeEffect &lt; slides[activeSlide][&quot;effects&quot;].length)) || ((dir == -1) &amp;&amp; (activeEffect &gt; 0))))
+	if (slides[activeSlide]["effects"] && (((dir == 1) && (activeEffect < slides[activeSlide]["effects"].length)) || ((dir == -1) && (activeEffect > 0))))
 	{
 		processingEffect = true;
 
 		if (dir == 1)
 		{
-			effectArray = slides[activeSlide][&quot;effects&quot;][activeEffect];
+			effectArray = slides[activeSlide]["effects"][activeEffect];
 			activeEffect += dir;
 		}
 		else if (dir == -1)
 		{
 			activeEffect += dir;
-			effectArray = slides[activeSlide][&quot;effects&quot;][activeEffect];
+			effectArray = slides[activeSlide]["effects"][activeEffect];
 		}
 
 		transCounter = 0;
@@ -628,7 +628,7 @@ function dispatchEffects(dir)
 		lastFrameTime = null;
 		effect(dir);
 	}
-	else if (((dir == 1) &amp;&amp; (activeSlide &lt; (slides.length - 1))) || (((dir == -1) &amp;&amp; (activeSlide &gt; 0))))
+	else if (((dir == 1) && (activeSlide < (slides.length - 1))) || (((dir == -1) && (activeSlide > 0))))
 	{
 		changeSlide(dir);
 	}
@@ -640,12 +640,12 @@ function dispatchEffects(dir)
  */
 function skipEffects(dir)
 {
-	if (slides[activeSlide][&quot;effects&quot;] &amp;&amp; (((dir == 1) &amp;&amp; (activeEffect &lt; slides[activeSlide][&quot;effects&quot;].length)) || ((dir == -1) &amp;&amp; (activeEffect &gt; 0))))
+	if (slides[activeSlide]["effects"] && (((dir == 1) && (activeEffect < slides[activeSlide]["effects"].length)) || ((dir == -1) && (activeEffect > 0))))
 	{
 		processingEffect = true;
 
-		if (slides[activeSlide][&quot;effects&quot;] &amp;&amp; (dir == 1))
-			activeEffect = slides[activeSlide][&quot;effects&quot;].length;
+		if (slides[activeSlide]["effects"] && (dir == 1))
+			activeEffect = slides[activeSlide]["effects"].length;
 		else
 			activeEffect = 0;
 
@@ -656,7 +656,7 @@ function skipEffects(dir)
 
 		processingEffect = false;
 	}
-	else if (((dir == 1) &amp;&amp; (activeSlide &lt; (slides.length - 1))) || (((dir == -1) &amp;&amp; (activeSlide &gt; 0))))
+	else if (((dir == 1) && (activeSlide < (slides.length - 1))) || (((dir == -1) && (activeSlide > 0))))
 	{
 		changeSlide(dir);
 	}
@@ -674,17 +674,17 @@ function changeSlide(dir)
 	effectArray[0] = new Object();
 	if (dir == 1)
 	{
-		effectArray[0][&quot;effect&quot;] = slides[activeSlide][&quot;transitionOut&quot;][&quot;name&quot;];
-		effectArray[0][&quot;options&quot;] = slides[activeSlide][&quot;transitionOut&quot;][&quot;options&quot;];
-		effectArray[0][&quot;dir&quot;] = -1;
+		effectArray[0]["effect"] = slides[activeSlide]["transitionOut"]["name"];
+		effectArray[0]["options"] = slides[activeSlide]["transitionOut"]["options"];
+		effectArray[0]["dir"] = -1;
 	}
 	else if (dir == -1)
 	{
-		effectArray[0][&quot;effect&quot;] = slides[activeSlide][&quot;transitionIn&quot;][&quot;name&quot;];
-		effectArray[0][&quot;options&quot;] = slides[activeSlide][&quot;transitionIn&quot;][&quot;options&quot;];
-		effectArray[0][&quot;dir&quot;] = 1;
+		effectArray[0]["effect"] = slides[activeSlide]["transitionIn"]["name"];
+		effectArray[0]["options"] = slides[activeSlide]["transitionIn"]["options"];
+		effectArray[0]["dir"] = 1;
 	}
-	effectArray[0][&quot;element&quot;] = slides[activeSlide][&quot;element&quot;];
+	effectArray[0]["element"] = slides[activeSlide]["element"];
 
 	activeSlide += dir;
 	setProgressBarValue(activeSlide);
@@ -693,21 +693,21 @@ function changeSlide(dir)
 
 	if (dir == 1)
 	{
-		effectArray[1][&quot;effect&quot;] = slides[activeSlide][&quot;transitionIn&quot;][&quot;name&quot;];
-		effectArray[1][&quot;options&quot;] = slides[activeSlide][&quot;transitionIn&quot;][&quot;options&quot;];
-		effectArray[1][&quot;dir&quot;] = 1;
+		effectArray[1]["effect"] = slides[activeSlide]["transitionIn"]["name"];
+		effectArray[1]["options"] = slides[activeSlide]["transitionIn"]["options"];
+		effectArray[1]["dir"] = 1;
 	}
 	else if (dir == -1)
 	{
-		effectArray[1][&quot;effect&quot;] = slides[activeSlide][&quot;transitionOut&quot;][&quot;name&quot;];
-		effectArray[1][&quot;options&quot;] = slides[activeSlide][&quot;transitionOut&quot;][&quot;options&quot;];
-		effectArray[1][&quot;dir&quot;] = -1;
+		effectArray[1]["effect"] = slides[activeSlide]["transitionOut"]["name"];
+		effectArray[1]["options"] = slides[activeSlide]["transitionOut"]["options"];
+		effectArray[1]["dir"] = -1;
 	}
 
-	effectArray[1][&quot;element&quot;] = slides[activeSlide][&quot;element&quot;];
+	effectArray[1]["element"] = slides[activeSlide]["element"];
 
-	if (slides[activeSlide][&quot;effects&quot;] &amp;&amp; (dir == -1))
-		activeEffect = slides[activeSlide][&quot;effects&quot;].length;
+	if (slides[activeSlide]["effects"] && (dir == -1))
+		activeEffect = slides[activeSlide]["effects"].length;
 	else
 		activeEffect = 0;
 
@@ -737,20 +737,20 @@ function toggleSlideIndex()
 	}
 	else if (currentMode == INDEX_MODE)
 	{
-		for (var counter = 0; counter &lt; slides.length; counter++)
+		for (var counter = 0; counter < slides.length; counter++)
 		{
-			slides[counter][&quot;element&quot;].setAttribute(&quot;transform&quot;,&quot;scale(1)&quot;);
+			slides[counter]["element"].setAttribute("transform","scale(1)");
 
 			if (counter == activeSlide)
 			{
-				slides[counter][&quot;element&quot;].style.display = &quot;inherit&quot;;
-				slides[counter][&quot;element&quot;].setAttribute(&quot;opacity&quot;,1);
+				slides[counter]["element"].style.display = "inherit";
+				slides[counter]["element"].setAttribute("opacity",1);
 				activeEffect = 0;
 			}
 			else
 			{
-				slides[counter][&quot;element&quot;].setAttribute(&quot;opacity&quot;,0);
-				slides[counter][&quot;element&quot;].style.display = &quot;none&quot;;
+				slides[counter]["element"].setAttribute("opacity",0);
+				slides[counter]["element"].style.display = "none";
 			}
 		}
 		currentMode = SLIDE_MODE;
@@ -777,16 +777,16 @@ function effect(dir)
 
 	var suspendHandle = ROOT_NODE.suspendRedraw(200);
 
-	for (var counter = 0; counter &lt; effectArray.length; counter++)
+	for (var counter = 0; counter < effectArray.length; counter++)
 	{
-		if (effectArray[counter][&quot;effect&quot;] == &quot;fade&quot;)
-			done &amp;= fade(parseInt(effectArray[counter][&quot;dir&quot;]) * dir, effectArray[counter][&quot;element&quot;], transCounter, effectArray[counter][&quot;options&quot;]);
-		else if (effectArray[counter][&quot;effect&quot;] == &quot;appear&quot;)
-			done &amp;= appear(parseInt(effectArray[counter][&quot;dir&quot;]) * dir, effectArray[counter][&quot;element&quot;], transCounter, effectArray[counter][&quot;options&quot;]);
-		else if (effectArray[counter][&quot;effect&quot;] == &quot;pop&quot;)
-			done &amp;= pop(parseInt(effectArray[counter][&quot;dir&quot;]) * dir, effectArray[counter][&quot;element&quot;], transCounter, effectArray[counter][&quot;options&quot;]);
-		else if (effectArray[counter][&quot;effect&quot;] == &quot;view&quot;)
-			done &amp;= view(parseInt(effectArray[counter][&quot;dir&quot;]) * dir, effectArray[counter][&quot;element&quot;], transCounter, effectArray[counter][&quot;options&quot;]);
+		if (effectArray[counter]["effect"] == "fade")
+			done &= fade(parseInt(effectArray[counter]["dir"]) * dir, effectArray[counter]["element"], transCounter, effectArray[counter]["options"]);
+		else if (effectArray[counter]["effect"] == "appear")
+			done &= appear(parseInt(effectArray[counter]["dir"]) * dir, effectArray[counter]["element"], transCounter, effectArray[counter]["options"]);
+		else if (effectArray[counter]["effect"] == "pop")
+			done &= pop(parseInt(effectArray[counter]["dir"]) * dir, effectArray[counter]["element"], transCounter, effectArray[counter]["options"]);
+		else if (effectArray[counter]["effect"] == "view")
+			done &= view(parseInt(effectArray[counter]["dir"]) * dir, effectArray[counter]["element"], transCounter, effectArray[counter]["options"]);
 	}
 
 	ROOT_NODE.unsuspendRedraw(suspendHandle);
@@ -803,13 +803,13 @@ function effect(dir)
 		{
 			timeDiff = timeStep - (currentTime - lastFrameTime);
 
-			if (timeDiff &lt;= 0)
+			if (timeDiff <= 0)
 				timeDiff = 1;
 		}
 
 		lastFrameTime = currentTime;
 
-		window.setTimeout(&quot;effect(&quot; + dir + &quot;)&quot;, timeDiff);
+		window.setTimeout("effect(" + dir + ")", timeDiff);
 	}
 	else
 	{
@@ -827,26 +827,26 @@ function displayIndex(offsetNumber)
 	var offsetX = 0;
 	var offsetY = 0;
 
-	if (offsetNumber &lt; 0)
+	if (offsetNumber < 0)
 		offsetNumber = 0;
-	else if (offsetNumber &gt;= slides.length)
+	else if (offsetNumber >= slides.length)
 		offsetNumber = slides.length - 1;
 
-	for (var counter = 0; counter &lt; slides.length; counter++)
+	for (var counter = 0; counter < slides.length; counter++)
 	{
-		if ((counter &lt; offsetNumber) || (counter &gt; offsetNumber + INDEX_COLUMNS * INDEX_COLUMNS - 1))
+		if ((counter < offsetNumber) || (counter > offsetNumber + INDEX_COLUMNS * INDEX_COLUMNS - 1))
 		{
-			slides[counter][&quot;element&quot;].setAttribute(&quot;opacity&quot;,0);
-			slides[counter][&quot;element&quot;].style.display = &quot;none&quot;;
+			slides[counter]["element"].setAttribute("opacity",0);
+			slides[counter]["element"].style.display = "none";
 		}
 		else
 		{
 			offsetX = ((counter - offsetNumber) % INDEX_COLUMNS) * WIDTH;
 			offsetY = Math.floor((counter - offsetNumber) / INDEX_COLUMNS) * HEIGHT;
 
-			slides[counter][&quot;element&quot;].setAttribute(&quot;transform&quot;,&quot;scale(&quot;+1/INDEX_COLUMNS+&quot;) translate(&quot;+offsetX+&quot;,&quot;+offsetY+&quot;)&quot;);
-			slides[counter][&quot;element&quot;].style.display = &quot;inherit&quot;;
-			slides[counter][&quot;element&quot;].setAttribute(&quot;opacity&quot;,0.5);
+			slides[counter]["element"].setAttribute("transform","scale("+1/INDEX_COLUMNS+") translate("+offsetX+","+offsetY+")");
+			slides[counter]["element"].style.display = "inherit";
+			slides[counter]["element"].setAttribute("opacity",0.5);
 		}
 
 		setSlideToState(counter, STATE_END);
@@ -863,19 +863,19 @@ function displayIndex(offsetNumber)
  */
 function slideSetActiveSlide(nbr)
 {
-	if (nbr &gt;= slides.length)
+	if (nbr >= slides.length)
 		nbr = slides.length - 1;
-	else if (nbr &lt; 0)
+	else if (nbr < 0)
 		nbr = 0;
 
-	slides[activeSlide][&quot;element&quot;].setAttribute(&quot;opacity&quot;,0);
-	slides[activeSlide][&quot;element&quot;].style.display = &quot;none&quot;;
+	slides[activeSlide]["element"].setAttribute("opacity",0);
+	slides[activeSlide]["element"].style.display = "none";
 
 	activeSlide = parseInt(nbr);
 
 	setSlideToState(activeSlide, STATE_START);
-	slides[activeSlide][&quot;element&quot;].style.display = &quot;inherit&quot;;
-	slides[activeSlide][&quot;element&quot;].setAttribute(&quot;opacity&quot;,1);
+	slides[activeSlide]["element"].style.display = "inherit";
+	slides[activeSlide]["element"].setAttribute("opacity",1);
 
 	activeEffect = 0;
 	setProgressBarValue(nbr);
@@ -887,17 +887,17 @@ function slideSetActiveSlide(nbr)
  */
 function indexSetActiveSlide(nbr)
 {
-	if (nbr &gt;= slides.length)
+	if (nbr >= slides.length)
 		nbr = slides.length - 1;
-	else if (nbr &lt; 0)
+	else if (nbr < 0)
 		nbr = 0;
 
-	slides[activeSlide][&quot;element&quot;].setAttribute(&quot;opacity&quot;,0.5);
+	slides[activeSlide]["element"].setAttribute("opacity",0.5);
 
 	activeSlide = parseInt(nbr);
 	window.location.hash = (activeSlide + 1) + '_0';
 
-	slides[activeSlide][&quot;element&quot;].setAttribute(&quot;opacity&quot;,1);
+	slides[activeSlide]["element"].setAttribute("opacity",1);
 }
 
 /** Function to set the page and active slide in index view. 
@@ -915,15 +915,15 @@ function indexSetActiveSlide(nbr)
  */
 function indexSetPageSlide(nbr)
 {
-	if (nbr &gt;= slides.length)
+	if (nbr >= slides.length)
 		nbr = slides.length - 1;
-	else if (nbr &lt; 0)
+	else if (nbr < 0)
 		nbr = 0;
 
 	//calculate the offset
 	var offset = nbr - nbr % (INDEX_COLUMNS * INDEX_COLUMNS);
 
-	if (offset &lt; 0)
+	if (offset < 0)
 		offset = 0;
 
 	//if different from kept offset, then record and change the page
@@ -948,7 +948,7 @@ function keydown(e)
 
 	code = e.keyCode || e.charCode;
 
-	if (!processingEffect &amp;&amp; keyCodeDictionary[currentMode] &amp;&amp; keyCodeDictionary[currentMode][code])
+	if (!processingEffect && keyCodeDictionary[currentMode] && keyCodeDictionary[currentMode][code])
 		return keyCodeDictionary[currentMode][code]();
 	else
 		document.onkeypress = keypress;
@@ -969,7 +969,7 @@ function keypress(e)
 
 	str = String.fromCharCode(e.keyCode || e.charCode);
 
-	if (!processingEffect &amp;&amp; charCodeDictionary[currentMode] &amp;&amp; charCodeDictionary[currentMode][str])
+	if (!processingEffect && charCodeDictionary[currentMode] && charCodeDictionary[currentMode][str])
 		return charCodeDictionary[currentMode][str]();
 }
 
@@ -985,37 +985,37 @@ function getDefaultCharCodeDictionary()
 	charCodeDict[INDEX_MODE] = new Object();
 	charCodeDict[DRAWING_MODE] = new Object();
 
-	charCodeDict[SLIDE_MODE][&quot;i&quot;] = function () { return toggleSlideIndex(); };
-	charCodeDict[SLIDE_MODE][&quot;d&quot;] = function () { return slideSwitchToDrawingMode(); };
-	charCodeDict[SLIDE_MODE][&quot;D&quot;] = function () { return slideQueryDuration(); };
-	charCodeDict[SLIDE_MODE][&quot;n&quot;] = function () { return slideAddSlide(activeSlide); };
-	charCodeDict[SLIDE_MODE][&quot;p&quot;] = function () { return slideToggleProgressBarVisibility(); };
-	charCodeDict[SLIDE_MODE][&quot;t&quot;] = function () { return slideResetTimer(); };
-	charCodeDict[SLIDE_MODE][&quot;e&quot;] = function () { return slideUpdateExportLayer(); };
+	charCodeDict[SLIDE_MODE]["i"] = function () { return toggleSlideIndex(); };
+	charCodeDict[SLIDE_MODE]["d"] = function () { return slideSwitchToDrawingMode(); };
+	charCodeDict[SLIDE_MODE]["D"] = function () { return slideQueryDuration(); };
+	charCodeDict[SLIDE_MODE]["n"] = function () { return slideAddSlide(activeSlide); };
+	charCodeDict[SLIDE_MODE]["p"] = function () { return slideToggleProgressBarVisibility(); };
+	charCodeDict[SLIDE_MODE]["t"] = function () { return slideResetTimer(); };
+	charCodeDict[SLIDE_MODE]["e"] = function () { return slideUpdateExportLayer(); };
 
-	charCodeDict[DRAWING_MODE][&quot;d&quot;] = function () { return drawingSwitchToSlideMode(); };
-	charCodeDict[DRAWING_MODE][&quot;0&quot;] = function () { return drawingResetPathWidth(); };
-	charCodeDict[DRAWING_MODE][&quot;1&quot;] = function () { return drawingSetPathWidth(1.0); };
-	charCodeDict[DRAWING_MODE][&quot;3&quot;] = function () { return drawingSetPathWidth(3.0); };
-	charCodeDict[DRAWING_MODE][&quot;5&quot;] = function () { return drawingSetPathWidth(5.0); };
-	charCodeDict[DRAWING_MODE][&quot;7&quot;] = function () { return drawingSetPathWidth(7.0); };
-	charCodeDict[DRAWING_MODE][&quot;9&quot;] = function () { return drawingSetPathWidth(9.0); };
-	charCodeDict[DRAWING_MODE][&quot;b&quot;] = function () { return drawingSetPathColour(&quot;blue&quot;); };
-	charCodeDict[DRAWING_MODE][&quot;c&quot;] = function () { return drawingSetPathColour(&quot;cyan&quot;); };
-	charCodeDict[DRAWING_MODE][&quot;g&quot;] = function () { return drawingSetPathColour(&quot;green&quot;); };
-	charCodeDict[DRAWING_MODE][&quot;k&quot;] = function () { return drawingSetPathColour(&quot;black&quot;); };
-	charCodeDict[DRAWING_MODE][&quot;m&quot;] = function () { return drawingSetPathColour(&quot;magenta&quot;); };
-	charCodeDict[DRAWING_MODE][&quot;o&quot;] = function () { return drawingSetPathColour(&quot;orange&quot;); };
-	charCodeDict[DRAWING_MODE][&quot;r&quot;] = function () { return drawingSetPathColour(&quot;red&quot;); };
-	charCodeDict[DRAWING_MODE][&quot;w&quot;] = function () { return drawingSetPathColour(&quot;white&quot;); };
-	charCodeDict[DRAWING_MODE][&quot;y&quot;] = function () { return drawingSetPathColour(&quot;yellow&quot;); };
-	charCodeDict[DRAWING_MODE][&quot;z&quot;] = function () { return drawingUndo(); };
+	charCodeDict[DRAWING_MODE]["d"] = function () { return drawingSwitchToSlideMode(); };
+	charCodeDict[DRAWING_MODE]["0"] = function () { return drawingResetPathWidth(); };
+	charCodeDict[DRAWING_MODE]["1"] = function () { return drawingSetPathWidth(1.0); };
+	charCodeDict[DRAWING_MODE]["3"] = function () { return drawingSetPathWidth(3.0); };
+	charCodeDict[DRAWING_MODE]["5"] = function () { return drawingSetPathWidth(5.0); };
+	charCodeDict[DRAWING_MODE]["7"] = function () { return drawingSetPathWidth(7.0); };
+	charCodeDict[DRAWING_MODE]["9"] = function () { return drawingSetPathWidth(9.0); };
+	charCodeDict[DRAWING_MODE]["b"] = function () { return drawingSetPathColour("blue"); };
+	charCodeDict[DRAWING_MODE]["c"] = function () { return drawingSetPathColour("cyan"); };
+	charCodeDict[DRAWING_MODE]["g"] = function () { return drawingSetPathColour("green"); };
+	charCodeDict[DRAWING_MODE]["k"] = function () { return drawingSetPathColour("black"); };
+	charCodeDict[DRAWING_MODE]["m"] = function () { return drawingSetPathColour("magenta"); };
+	charCodeDict[DRAWING_MODE]["o"] = function () { return drawingSetPathColour("orange"); };
+	charCodeDict[DRAWING_MODE]["r"] = function () { return drawingSetPathColour("red"); };
+	charCodeDict[DRAWING_MODE]["w"] = function () { return drawingSetPathColour("white"); };
+	charCodeDict[DRAWING_MODE]["y"] = function () { return drawingSetPathColour("yellow"); };
+	charCodeDict[DRAWING_MODE]["z"] = function () { return drawingUndo(); };
 
-	charCodeDict[INDEX_MODE][&quot;i&quot;] = function () { return toggleSlideIndex(); };
-	charCodeDict[INDEX_MODE][&quot;-&quot;] = function () { return indexDecreaseNumberOfColumns(); };
-	charCodeDict[INDEX_MODE][&quot;=&quot;] = function () { return indexIncreaseNumberOfColumns(); };
-	charCodeDict[INDEX_MODE][&quot;+&quot;] = function () { return indexIncreaseNumberOfColumns(); };
-	charCodeDict[INDEX_MODE][&quot;0&quot;] = function () { return indexResetNumberOfColumns(); };
+	charCodeDict[INDEX_MODE]["i"] = function () { return toggleSlideIndex(); };
+	charCodeDict[INDEX_MODE]["-"] = function () { return indexDecreaseNumberOfColumns(); };
+	charCodeDict[INDEX_MODE]["="] = function () { return indexIncreaseNumberOfColumns(); };
+	charCodeDict[INDEX_MODE]["+"] = function () { return indexIncreaseNumberOfColumns(); };
+	charCodeDict[INDEX_MODE]["0"] = function () { return indexResetNumberOfColumns(); };
 
 	return charCodeDict;
 }
@@ -1069,15 +1069,15 @@ function mouseHandlerDispatch(evnt, action)
 
 	var retVal = true;
 
-	if (!processingEffect &amp;&amp; mouseHandlerDictionary[currentMode] &amp;&amp; mouseHandlerDictionary[currentMode][action])
+	if (!processingEffect && mouseHandlerDictionary[currentMode] && mouseHandlerDictionary[currentMode][action])
 	{
 		var subRetVal = mouseHandlerDictionary[currentMode][action](evnt);
 
-		if (subRetVal != null &amp;&amp; subRetVal != undefined)
+		if (subRetVal != null && subRetVal != undefined)
 			retVal = subRetVal;
 	}
 
-	if (evnt.preventDefault &amp;&amp; !retVal)
+	if (evnt.preventDefault && !retVal)
 		evnt.preventDefault();
 
 	evnt.returnValue = retVal;
@@ -1131,13 +1131,13 @@ function slideSwitchToDrawingMode()
 
 	var tempDict;
 
-	if (ROOT_NODE.hasAttribute(&quot;style&quot;))
-		tempDict = propStrToDict(ROOT_NODE.getAttribute(&quot;style&quot;));
+	if (ROOT_NODE.hasAttribute("style"))
+		tempDict = propStrToDict(ROOT_NODE.getAttribute("style"));
 	else
 		tempDict = new Object();
 
-	tempDict[&quot;cursor&quot;] = &quot;crosshair&quot;;
-	ROOT_NODE.setAttribute(&quot;style&quot;, dictToPropStr(tempDict));
+	tempDict["cursor"] = "crosshair";
+	ROOT_NODE.setAttribute("style", dictToPropStr(tempDict));
 }
 
 /** Function to switch from drawing mode to slide mode.
@@ -1148,20 +1148,20 @@ function drawingSwitchToSlideMode()
 
 	var tempDict;
 
-	if (ROOT_NODE.hasAttribute(&quot;style&quot;))
-		tempDict = propStrToDict(ROOT_NODE.getAttribute(&quot;style&quot;));
+	if (ROOT_NODE.hasAttribute("style"))
+		tempDict = propStrToDict(ROOT_NODE.getAttribute("style"));
 	else
 		tempDict = new Object();
 
-	tempDict[&quot;cursor&quot;] = &quot;auto&quot;;
-	ROOT_NODE.setAttribute(&quot;style&quot;, dictToPropStr(tempDict));
+	tempDict["cursor"] = "auto";
+	ROOT_NODE.setAttribute("style", dictToPropStr(tempDict));
 }
 
 /** Function to decrease the number of columns in index mode.
 */
 function indexDecreaseNumberOfColumns()
 {
-	if (INDEX_COLUMNS &gt;= 3)
+	if (INDEX_COLUMNS >= 3)
 	{
 		INDEX_COLUMNS -= 1;
 		INDEX_OFFSET = -1
@@ -1173,7 +1173,7 @@ function indexDecreaseNumberOfColumns()
 */
 function indexIncreaseNumberOfColumns()
 {
-	if (INDEX_COLUMNS &lt; 7)
+	if (INDEX_COLUMNS < 7)
 	{
 		INDEX_COLUMNS += 1;
 		INDEX_OFFSET = -1
@@ -1224,9 +1224,9 @@ function drawingSetPathColour(colour)
 */
 function slideQueryDuration()
 {
-	var new_duration = prompt(&quot;Length of presentation in minutes?&quot;, timer_duration);
+	var new_duration = prompt("Length of presentation in minutes?", timer_duration);
 
-	if ((new_duration != null) &amp;&amp; (new_duration != ''))
+	if ((new_duration != null) && (new_duration != ''))
 	{
 		timer_duration = new_duration;
 	}
@@ -1275,7 +1275,7 @@ function padString(str, len)
 {
 	var outStr = str;
 
-	while (outStr.length &lt; len)
+	while (outStr.length < len)
 	{
 		outStr = '0' + outStr;
 	}
@@ -1294,7 +1294,7 @@ function slideUpdateExportLayer()
 	var tmpActiveEffect = activeEffect;
 	var exportedLayers = new Array();
 
-	for (var counterSlides = 0; counterSlides &lt; slides.length; counterSlides++)
+	for (var counterSlides = 0; counterSlides < slides.length; counterSlides++)
 	{
 		var exportNode;
 
@@ -1308,33 +1308,33 @@ function slideUpdateExportLayer()
 		}
 
 		exportNode = slides[counterSlides].element.cloneNode(true);
-		exportNode.setAttributeNS(NSS[&quot;inkscape&quot;], &quot;groupmode&quot;, &quot;layer&quot;);
-		exportNode.setAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;, &quot;slide_&quot; + padString((counterSlides + 1).toString(), slides.length.toString().length) + &quot;_effect_&quot; + padString(&quot;0&quot;, maxEffect.toString().length));
+		exportNode.setAttributeNS(NSS["inkscape"], "groupmode", "layer");
+		exportNode.setAttributeNS(NSS["inkscape"], "label", "slide_" + padString((counterSlides + 1).toString(), slides.length.toString().length) + "_effect_" + padString("0", maxEffect.toString().length));
 
 		exportedLayers.push(exportNode);
 
-		if (slides[counterSlides][&quot;effects&quot;])
+		if (slides[counterSlides]["effects"])
 		{	
-			for (var counter = 0; counter &lt; slides[counterSlides][&quot;effects&quot;].length; counter++)
+			for (var counter = 0; counter < slides[counterSlides]["effects"].length; counter++)
 			{
-				for (var subCounter = 0; subCounter &lt; slides[counterSlides][&quot;effects&quot;][counter].length; subCounter++)
+				for (var subCounter = 0; subCounter < slides[counterSlides]["effects"][counter].length; subCounter++)
 				{
-					var effect = slides[counterSlides][&quot;effects&quot;][counter][subCounter];
-					if (effect[&quot;effect&quot;] == &quot;fade&quot;)
-						fade(parseInt(effect[&quot;dir&quot;]), effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;appear&quot;)
-						appear(parseInt(effect[&quot;dir&quot;]), effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;pop&quot;)
-						pop(parseInt(effect[&quot;dir&quot;]), effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;view&quot;)
-						view(parseInt(effect[&quot;dir&quot;]), effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
+					var effect = slides[counterSlides]["effects"][counter][subCounter];
+					if (effect["effect"] == "fade")
+						fade(parseInt(effect["dir"]), effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "appear")
+						appear(parseInt(effect["dir"]), effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "pop")
+						pop(parseInt(effect["dir"]), effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "view")
+						view(parseInt(effect["dir"]), effect["element"], STATE_END, effect["options"]);	
 				}
 
-				var layerName = &quot;slide_&quot; + padString((counterSlides + 1).toString(), slides.length.toString().length) + &quot;_effect_&quot; + padString((counter + 1).toString(), maxEffect.toString().length);
+				var layerName = "slide_" + padString((counterSlides + 1).toString(), slides.length.toString().length) + "_effect_" + padString((counter + 1).toString(), maxEffect.toString().length);
 				exportNode = slides[counterSlides].element.cloneNode(true);
-				exportNode.setAttributeNS(NSS[&quot;inkscape&quot;], &quot;groupmode&quot;, &quot;layer&quot;);
-				exportNode.setAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;, layerName);
-				exportNode.setAttribute(&quot;id&quot;, layerName);
+				exportNode.setAttributeNS(NSS["inkscape"], "groupmode", "layer");
+				exportNode.setAttributeNS(NSS["inkscape"], "label", layerName);
+				exportNode.setAttribute("id", layerName);
 
 				exportedLayers.push(exportNode);
 			}
@@ -1356,7 +1356,7 @@ function slideUpdateExportLayer()
 	// Delete all layers and script elements.
 	var nodesToBeRemoved = new Array();
 
-	for (var childCounter = 0; childCounter &lt;  newDoc.childNodes.length; childCounter++)
+	for (var childCounter = 0; childCounter <  newDoc.childNodes.length; childCounter++)
 	{
 		var child = newDoc.childNodes[childCounter];
 
@@ -1369,14 +1369,14 @@ function slideUpdateExportLayer()
 		}
 	}
 
-	for (var ndCounter = 0; ndCounter &lt; nodesToBeRemoved.length; ndCounter++)
+	for (var ndCounter = 0; ndCounter < nodesToBeRemoved.length; ndCounter++)
 	{
 		var nd = nodesToBeRemoved[ndCounter];
 
 		// Before removing the node, check whether it contains any definitions.
-		var defs = nd.getElementsByTagNameNS(NSS[&quot;svg&quot;], &quot;defs&quot;);
+		var defs = nd.getElementsByTagNameNS(NSS["svg"], "defs");
 
-		for (var defsCounter = 0; defsCounter &lt; defs.length; defsCounter++)
+		for (var defsCounter = 0; defsCounter < defs.length; defsCounter++)
 		{
 			if (defs[defsCounter].id)
 			{
@@ -1393,9 +1393,9 @@ function slideUpdateExportLayer()
 	{
 		var namedView;
 
-		for (var nodeCounter = 0; nodeCounter &lt; newDoc.childNodes.length; nodeCounter++)
+		for (var nodeCounter = 0; nodeCounter < newDoc.childNodes.length; nodeCounter++)
 		{
-			if ((newDoc.childNodes[nodeCounter].nodeType == 1) &amp;&amp; (newDoc.childNodes[nodeCounter].getAttribute('id') == 'base'))
+			if ((newDoc.childNodes[nodeCounter].nodeType == 1) && (newDoc.childNodes[nodeCounter].getAttribute('id') == 'base'))
 			{
 				namedView = newDoc.childNodes[nodeCounter];
 			}
@@ -1408,12 +1408,12 @@ function slideUpdateExportLayer()
 	}
 
 	// Add exported layers.
-	while (exportedLayers.length &gt; 0)
+	while (exportedLayers.length > 0)
 	{
 		var nd = exportedLayers.pop();
 
-		nd.setAttribute(&quot;opacity&quot;,1);
-		nd.style.display = &quot;inherit&quot;;
+		nd.setAttribute("opacity",1);
+		nd.style.display = "inherit";
 
 		newDoc.appendChild(nd);
 	}
@@ -1422,7 +1422,7 @@ function slideUpdateExportLayer()
 	var serializer = new XMLSerializer();
 	var strm = 
 	{
-		content : &quot;&quot;,
+		content : "",
 		close : function() {},  
 		flush : function() {},  
 		write : function(str, count) { this.content += str; }  
@@ -1444,7 +1444,7 @@ function drawingUndo()
 	mouse_presentation_path = null;
 	mouse_original_path = null;
 
-	if (history_presentation_elements.length &gt; 0)
+	if (history_presentation_elements.length > 0)
 	{
 		var p = history_presentation_elements.pop();
 		var parent = p.parentNode.removeChild(p);
@@ -1475,26 +1475,26 @@ function drawingMousedown(e)
 
 		mouse_last_x = e.clientX;
 		mouse_last_y = e.clientY;
-		mouse_original_path = document.createElementNS(NSS[&quot;svg&quot;], &quot;path&quot;);
-		mouse_original_path.setAttribute(&quot;stroke&quot;, path_colour);
-		mouse_original_path.setAttribute(&quot;stroke-width&quot;, path_paint_width);
-		mouse_original_path.setAttribute(&quot;fill&quot;, &quot;none&quot;);
-		mouse_original_path.setAttribute(&quot;id&quot;, &quot;path &quot; + Date());
-		mouse_original_path.setAttribute(&quot;d&quot;, &quot;M&quot; + p.x + &quot;,&quot; + p.y);
-		slides[activeSlide][&quot;original_element&quot;].appendChild(mouse_original_path);
+		mouse_original_path = document.createElementNS(NSS["svg"], "path");
+		mouse_original_path.setAttribute("stroke", path_colour);
+		mouse_original_path.setAttribute("stroke-width", path_paint_width);
+		mouse_original_path.setAttribute("fill", "none");
+		mouse_original_path.setAttribute("id", "path " + Date());
+		mouse_original_path.setAttribute("d", "M" + p.x + "," + p.y);
+		slides[activeSlide]["original_element"].appendChild(mouse_original_path);
 		history_original_elements.push(mouse_original_path);
 
-		mouse_presentation_path = document.createElementNS(NSS[&quot;svg&quot;], &quot;path&quot;);
-		mouse_presentation_path.setAttribute(&quot;stroke&quot;, path_colour);
-		mouse_presentation_path.setAttribute(&quot;stroke-width&quot;, path_paint_width);
-		mouse_presentation_path.setAttribute(&quot;fill&quot;, &quot;none&quot;);
-		mouse_presentation_path.setAttribute(&quot;id&quot;, &quot;path &quot; + Date() + &quot; presentation copy&quot;);
-		mouse_presentation_path.setAttribute(&quot;d&quot;, &quot;M&quot; + p.x + &quot;,&quot; + p.y);
+		mouse_presentation_path = document.createElementNS(NSS["svg"], "path");
+		mouse_presentation_path.setAttribute("stroke", path_colour);
+		mouse_presentation_path.setAttribute("stroke-width", path_paint_width);
+		mouse_presentation_path.setAttribute("fill", "none");
+		mouse_presentation_path.setAttribute("id", "path " + Date() + " presentation copy");
+		mouse_presentation_path.setAttribute("d", "M" + p.x + "," + p.y);
 
-		if (slides[activeSlide][&quot;viewGroup&quot;])
-			slides[activeSlide][&quot;viewGroup&quot;].appendChild(mouse_presentation_path);
+		if (slides[activeSlide]["viewGroup"])
+			slides[activeSlide]["viewGroup"].appendChild(mouse_presentation_path);
 		else
-			slides[activeSlide][&quot;element&quot;].appendChild(mouse_presentation_path);
+			slides[activeSlide]["element"].appendChild(mouse_presentation_path);
 
 		history_presentation_elements.push(mouse_presentation_path);
 
@@ -1516,11 +1516,11 @@ function drawingMouseup(e)
 	if (mouse_presentation_path != null)
 	{
 		var p = calcCoord(e);
-		var d = mouse_presentation_path.getAttribute(&quot;d&quot;);
-		d += &quot; L&quot; + p.x + &quot;,&quot; + p.y;
-		mouse_presentation_path.setAttribute(&quot;d&quot;, d);
+		var d = mouse_presentation_path.getAttribute("d");
+		d += " L" + p.x + "," + p.y;
+		mouse_presentation_path.setAttribute("d", d);
 		mouse_presentation_path = null;
-		mouse_original_path.setAttribute(&quot;d&quot;, d);
+		mouse_original_path.setAttribute("d", d);
 		mouse_original_path = null;
 
 		return false;
@@ -1545,13 +1545,13 @@ function drawingMousemove(e)
 		return true;
 	}
 
-	if (dist &gt;= mouse_min_dist_sqr)
+	if (dist >= mouse_min_dist_sqr)
 	{
 		var p = calcCoord(e);
-		var d = mouse_presentation_path.getAttribute(&quot;d&quot;);
-		d += &quot; L&quot; + p.x + &quot;,&quot; + p.y;
-		mouse_presentation_path.setAttribute(&quot;d&quot;, d);
-		mouse_original_path.setAttribute(&quot;d&quot;, d);
+		var d = mouse_presentation_path.getAttribute("d");
+		d += " L" + p.x + "," + p.y;
+		mouse_presentation_path.setAttribute("d", d);
+		mouse_original_path.setAttribute("d", d);
 		mouse_last_x = e.clientX;
 		mouse_last_y = e.clientY;
 	}
@@ -1580,9 +1580,9 @@ function slideMousewheel(e)
 		delta = -e.detail/3;
 	}
 
-	if (delta &gt; 0)
+	if (delta > 0)
 		skipEffects(-1);
-	else if (delta &lt; 0)
+	else if (delta < 0)
 		skipEffects(1);
 
 	if (e.preventDefault)
@@ -1612,9 +1612,9 @@ function indexMousewheel(e)
 		delta = -e.detail/3;
 	}
 
-	if (delta &gt; 0)
+	if (delta > 0)
 		indexSetPageSlide(activeSlide - INDEX_COLUMNS * INDEX_COLUMNS);
-	else if (delta &lt; 0)
+	else if (delta < 0)
 		indexSetPageSlide(activeSlide + INDEX_COLUMNS * INDEX_COLUMNS);
 
 	if (e.preventDefault)
@@ -1635,10 +1635,10 @@ function set_path_paint_width()
 	svgPoint2.x = 1.0;
 	svgPoint2.y = 0.0;
 
-	var matrix = slides[activeSlide][&quot;element&quot;].getTransformToElement(ROOT_NODE);
+	var matrix = slides[activeSlide]["element"].getTransformToElement(ROOT_NODE);
 
-	if (slides[activeSlide][&quot;viewGroup&quot;])
-		matrix = slides[activeSlide][&quot;viewGroup&quot;].getTransformToElement(ROOT_NODE);
+	if (slides[activeSlide]["viewGroup"])
+		matrix = slides[activeSlide]["viewGroup"].getTransformToElement(ROOT_NODE);
 
 	svgPoint1 = svgPoint1.matrixTransform(matrix);
 	svgPoint2 = svgPoint2.matrixTransform(matrix);
@@ -1658,63 +1658,63 @@ function view(dir, element, time, options)
 	var length = 250;
 	var fraction;
 
-	if (!options[&quot;matrixInitial&quot;])
+	if (!options["matrixInitial"])
 	{
-		var tempString = slides[activeSlide][&quot;viewGroup&quot;].getAttribute(&quot;transform&quot;);
+		var tempString = slides[activeSlide]["viewGroup"].getAttribute("transform");
 
 		if (tempString)
-			options[&quot;matrixInitial&quot;] = (new matrixSVG()).fromAttribute(tempString);
+			options["matrixInitial"] = (new matrixSVG()).fromAttribute(tempString);
 		else
-			options[&quot;matrixInitial&quot;] = (new matrixSVG()).fromSVGElements(1, 0, 0, 1, 0, 0);
+			options["matrixInitial"] = (new matrixSVG()).fromSVGElements(1, 0, 0, 1, 0, 0);
 	}
 
 	if ((time == STATE_END) || (time == STATE_START))
 		fraction = 1;
 	else
 	{
-		if (options &amp;&amp; options[&quot;length&quot;])
-			length = options[&quot;length&quot;];
+		if (options && options["length"])
+			length = options["length"];
 
 		fraction = time / length;
 	}
 
 	if (dir == 1)
 	{
-		if (fraction &lt;= 0)
+		if (fraction <= 0)
 		{
-			element.setAttribute(&quot;transform&quot;, options[&quot;matrixInitial&quot;].toAttribute());
+			element.setAttribute("transform", options["matrixInitial"].toAttribute());
 		}
-		else if (fraction &gt;= 1)
+		else if (fraction >= 1)
 		{
-			element.setAttribute(&quot;transform&quot;, options[&quot;matrixNew&quot;].toAttribute());
+			element.setAttribute("transform", options["matrixNew"].toAttribute());
 
 			set_path_paint_width();
 
-			options[&quot;matrixInitial&quot;] = null;
+			options["matrixInitial"] = null;
 			return true;
 		}
 		else
 		{
-			element.setAttribute(&quot;transform&quot;, options[&quot;matrixInitial&quot;].mix(options[&quot;matrixNew&quot;], fraction).toAttribute());
+			element.setAttribute("transform", options["matrixInitial"].mix(options["matrixNew"], fraction).toAttribute());
 		}
 	}
 	else if (dir == -1)
 	{
-		if (fraction &lt;= 0)
+		if (fraction <= 0)
 		{
-			element.setAttribute(&quot;transform&quot;, options[&quot;matrixInitial&quot;].toAttribute());
+			element.setAttribute("transform", options["matrixInitial"].toAttribute());
 		}
-		else if (fraction &gt;= 1)
+		else if (fraction >= 1)
 		{
-			element.setAttribute(&quot;transform&quot;, options[&quot;matrixOld&quot;].toAttribute());
+			element.setAttribute("transform", options["matrixOld"].toAttribute());
 			set_path_paint_width();
 
-			options[&quot;matrixInitial&quot;] = null;
+			options["matrixInitial"] = null;
 			return true;
 		}
 		else
 		{
-			element.setAttribute(&quot;transform&quot;, options[&quot;matrixInitial&quot;].mix(options[&quot;matrixOld&quot;], fraction).toAttribute());
+			element.setAttribute("transform", options["matrixInitial"].mix(options["matrixOld"], fraction).toAttribute());
 		}
 	}
 
@@ -1737,48 +1737,48 @@ function fade(dir, element, time, options)
 		fraction = 1;
 	else
 	{
-		if (options &amp;&amp; options[&quot;length&quot;])
-			length = options[&quot;length&quot;];
+		if (options && options["length"])
+			length = options["length"];
 
 		fraction = time / length;
 	}
 
 	if (dir == 1)
 	{
-		if (fraction &lt;= 0)
+		if (fraction <= 0)
 		{
-			element.style.display = &quot;none&quot;;
-			element.setAttribute(&quot;opacity&quot;, 0);
+			element.style.display = "none";
+			element.setAttribute("opacity", 0);
 		}
-		else if (fraction &gt;= 1)
+		else if (fraction >= 1)
 		{
-			element.style.display = &quot;inherit&quot;;
-			element.setAttribute(&quot;opacity&quot;, 1);
+			element.style.display = "inherit";
+			element.setAttribute("opacity", 1);
 			return true;
 		}
 		else
 		{
-			element.style.display = &quot;inherit&quot;;
-			element.setAttribute(&quot;opacity&quot;, fraction);
+			element.style.display = "inherit";
+			element.setAttribute("opacity", fraction);
 		}
 	}
 	else if (dir == -1)
 	{
-		if (fraction &lt;= 0)
+		if (fraction <= 0)
 		{
-			element.style.display = &quot;inherit&quot;;
-			element.setAttribute(&quot;opacity&quot;, 1);
+			element.style.display = "inherit";
+			element.setAttribute("opacity", 1);
 		}
-		else if (fraction &gt;= 1)
+		else if (fraction >= 1)
 		{
-			element.setAttribute(&quot;opacity&quot;, 0);
-			element.style.display = &quot;none&quot;;
+			element.setAttribute("opacity", 0);
+			element.style.display = "none";
 			return true;
 		}
 		else
 		{
-			element.style.display = &quot;inherit&quot;;
-			element.setAttribute(&quot;opacity&quot;, 1 - fraction);
+			element.style.display = "inherit";
+			element.setAttribute("opacity", 1 - fraction);
 		}
 	}
 	return false;
@@ -1795,13 +1795,13 @@ function appear(dir, element, time, options)
 {
 	if (dir == 1)
 	{
-		element.style.display = &quot;inherit&quot;;
-		element.setAttribute(&quot;opacity&quot;,1);
+		element.style.display = "inherit";
+		element.setAttribute("opacity",1);
 	}
 	else if (dir == -1)
 	{
-		element.style.display = &quot;none&quot;;
-		element.setAttribute(&quot;opacity&quot;,0);
+		element.style.display = "none";
+		element.setAttribute("opacity",0);
 	}
 	return true;
 }
@@ -1822,59 +1822,59 @@ function pop(dir, element, time, options)
 		fraction = 1;
 	else
 	{
-		if (options &amp;&amp; options[&quot;length&quot;])
-			length = options[&quot;length&quot;];
+		if (options && options["length"])
+			length = options["length"];
 
 		fraction = time / length;
 	}
 
 	if (dir == 1)
 	{
-		if (fraction &lt;= 0)
+		if (fraction <= 0)
 		{
-			element.setAttribute(&quot;opacity&quot;, 0);
-			element.setAttribute(&quot;transform&quot;, &quot;scale(0)&quot;);
-			element.style.display = &quot;none&quot;;
+			element.setAttribute("opacity", 0);
+			element.setAttribute("transform", "scale(0)");
+			element.style.display = "none";
 		}
-		else if (fraction &gt;= 1)
+		else if (fraction >= 1)
 		{
-			element.setAttribute(&quot;opacity&quot;, 1);
-			element.removeAttribute(&quot;transform&quot;);
-			element.style.display = &quot;inherit&quot;;
+			element.setAttribute("opacity", 1);
+			element.removeAttribute("transform");
+			element.style.display = "inherit";
 			return true;
 		}
 		else
 		{
-			element.style.display = &quot;inherit&quot;;
+			element.style.display = "inherit";
 			var opacityFraction = fraction * 3;
-			if (opacityFraction &gt; 1)
+			if (opacityFraction > 1)
 				opacityFraction = 1;
-			element.setAttribute(&quot;opacity&quot;, opacityFraction);
+			element.setAttribute("opacity", opacityFraction);
 			var offsetX = WIDTH * (1.0 - fraction) / 2.0;
 			var offsetY = HEIGHT * (1.0 - fraction) / 2.0;
-			element.setAttribute(&quot;transform&quot;, &quot;translate(&quot; + offsetX + &quot;,&quot; + offsetY + &quot;) scale(&quot; + fraction + &quot;)&quot;);
+			element.setAttribute("transform", "translate(" + offsetX + "," + offsetY + ") scale(" + fraction + ")");
 		}
 	}
 	else if (dir == -1)
 	{
-		if (fraction &lt;= 0)
+		if (fraction <= 0)
 		{
-			element.setAttribute(&quot;opacity&quot;, 1);
-			element.setAttribute(&quot;transform&quot;, &quot;scale(1)&quot;);
-			element.style.display = &quot;inherit&quot;;
+			element.setAttribute("opacity", 1);
+			element.setAttribute("transform", "scale(1)");
+			element.style.display = "inherit";
 		}
-		else if (fraction &gt;= 1)
+		else if (fraction >= 1)
 		{
-			element.setAttribute(&quot;opacity&quot;, 0);
-			element.removeAttribute(&quot;transform&quot;);
-			element.style.display = &quot;none&quot;;
+			element.setAttribute("opacity", 0);
+			element.removeAttribute("transform");
+			element.style.display = "none";
 			return true;
 		}
 		else
 		{
-			element.setAttribute(&quot;opacity&quot;, 1 - fraction);
-			element.setAttribute(&quot;transform&quot;, &quot;scale(&quot; + 1 - fraction + &quot;)&quot;);
-			element.style.display = &quot;inherit&quot;;
+			element.setAttribute("opacity", 1 - fraction);
+			element.setAttribute("transform", "scale(" + 1 - fraction + ")");
+			element.style.display = "inherit";
 		}
 	}
 	return false;
@@ -1887,43 +1887,43 @@ function pop(dir, element, time, options)
  */
 function setSlideToState(slide, state)
 {
-	slides[slide][&quot;viewGroup&quot;].setAttribute(&quot;transform&quot;, slides[slide].initialView);
+	slides[slide]["viewGroup"].setAttribute("transform", slides[slide].initialView);
 
-	if (slides[slide][&quot;effects&quot;])
+	if (slides[slide]["effects"])
 	{	
 		if (state == STATE_END)
 		{
-			for (var counter = 0; counter &lt; slides[slide][&quot;effects&quot;].length; counter++)
+			for (var counter = 0; counter < slides[slide]["effects"].length; counter++)
 			{
-				for (var subCounter = 0; subCounter &lt; slides[slide][&quot;effects&quot;][counter].length; subCounter++)
+				for (var subCounter = 0; subCounter < slides[slide]["effects"][counter].length; subCounter++)
 				{
-					var effect = slides[slide][&quot;effects&quot;][counter][subCounter];
-					if (effect[&quot;effect&quot;] == &quot;fade&quot;)
-						fade(effect[&quot;dir&quot;], effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;appear&quot;)
-						appear(effect[&quot;dir&quot;], effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;pop&quot;)
-						pop(effect[&quot;dir&quot;], effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;view&quot;)
-						view(effect[&quot;dir&quot;], effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
+					var effect = slides[slide]["effects"][counter][subCounter];
+					if (effect["effect"] == "fade")
+						fade(effect["dir"], effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "appear")
+						appear(effect["dir"], effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "pop")
+						pop(effect["dir"], effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "view")
+						view(effect["dir"], effect["element"], STATE_END, effect["options"]);	
 				}
 			}
 		}
 		else if (state == STATE_START)
 		{
-			for (var counter = slides[slide][&quot;effects&quot;].length - 1; counter &gt;= 0; counter--)
+			for (var counter = slides[slide]["effects"].length - 1; counter >= 0; counter--)
 			{
-				for (var subCounter = 0; subCounter &lt; slides[slide][&quot;effects&quot;][counter].length; subCounter++)
+				for (var subCounter = 0; subCounter < slides[slide]["effects"][counter].length; subCounter++)
 				{
-					var effect = slides[slide][&quot;effects&quot;][counter][subCounter];
-					if (effect[&quot;effect&quot;] == &quot;fade&quot;)
-						fade(parseInt(effect[&quot;dir&quot;]) * -1, effect[&quot;element&quot;], STATE_START, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;appear&quot;)
-						appear(parseInt(effect[&quot;dir&quot;]) * -1, effect[&quot;element&quot;], STATE_START, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;pop&quot;)
-						pop(parseInt(effect[&quot;dir&quot;]) * -1, effect[&quot;element&quot;], STATE_START, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;view&quot;)
-						view(parseInt(effect[&quot;dir&quot;]) * -1, effect[&quot;element&quot;], STATE_START, effect[&quot;options&quot;]);	
+					var effect = slides[slide]["effects"][counter][subCounter];
+					if (effect["effect"] == "fade")
+						fade(parseInt(effect["dir"]) * -1, effect["element"], STATE_START, effect["options"]);	
+					else if (effect["effect"] == "appear")
+						appear(parseInt(effect["dir"]) * -1, effect["element"], STATE_START, effect["options"]);	
+					else if (effect["effect"] == "pop")
+						pop(parseInt(effect["dir"]) * -1, effect["element"], STATE_START, effect["options"]);	
+					else if (effect["effect"] == "view")
+						view(parseInt(effect["dir"]) * -1, effect["element"], STATE_START, effect["options"]);	
 				}
 			}
 		}
@@ -1931,19 +1931,19 @@ function setSlideToState(slide, state)
 		{
 			setSlideToState(slide, STATE_START);
 
-			for (var counter = 0; counter &lt; slides[slide][&quot;effects&quot;].length &amp;&amp; counter &lt; state; counter++)
+			for (var counter = 0; counter < slides[slide]["effects"].length && counter < state; counter++)
 			{
-				for (var subCounter = 0; subCounter &lt; slides[slide][&quot;effects&quot;][counter].length; subCounter++)
+				for (var subCounter = 0; subCounter < slides[slide]["effects"][counter].length; subCounter++)
 				{
-					var effect = slides[slide][&quot;effects&quot;][counter][subCounter];
-					if (effect[&quot;effect&quot;] == &quot;fade&quot;)
-						fade(effect[&quot;dir&quot;], effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;appear&quot;)
-						appear(effect[&quot;dir&quot;], effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;pop&quot;)
-						pop(effect[&quot;dir&quot;], effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
-					else if (effect[&quot;effect&quot;] == &quot;view&quot;)
-						view(effect[&quot;dir&quot;], effect[&quot;element&quot;], STATE_END, effect[&quot;options&quot;]);	
+					var effect = slides[slide]["effects"][counter][subCounter];
+					if (effect["effect"] == "fade")
+						fade(effect["dir"], effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "appear")
+						appear(effect["dir"], effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "pop")
+						pop(effect["dir"], effect["element"], STATE_END, effect["options"]);	
+					else if (effect["effect"] == "view")
+						view(effect["dir"], effect["element"], STATE_END, effect["options"]);	
 				}
 			}
 		}
@@ -1960,13 +1960,13 @@ function setSlideToState(slide, state)
  */
 function propStrToDict(str)
 {
-	var list = str.split(&quot;;&quot;);
+	var list = str.split(";");
 	var obj = new Object();
 
-	for (var counter = 0; counter &lt; list.length; counter++)
+	for (var counter = 0; counter < list.length; counter++)
 	{
 		var subStr = list[counter];
-		var subList = subStr.split(&quot;:&quot;);
+		var subList = subStr.split(":");
 		if (subList.length == 2)
 		{
 			obj[subList[0]] = subList[1];
@@ -1984,11 +1984,11 @@ function propStrToDict(str)
  */
 function dictToPropStr(dict)
 {
-	var str = &quot;&quot;;
+	var str = "";
 
 	for (var key in dict)
 	{
-		str += key + &quot;:&quot; + dict[key] + &quot;;&quot;;
+		str += key + ":" + dict[key] + ";";
 	}
 
 	return str;
@@ -2005,19 +2005,19 @@ function suffixNoneIds_sub(node, suffix, replace)
 {
 	if (node.nodeType == 1)
 	{
-		if (node.getAttribute(&quot;id&quot;))
+		if (node.getAttribute("id"))
 		{
-			var id = node.getAttribute(&quot;id&quot;)
-				replace[&quot;#&quot; + id] = id + suffix;
-			node.setAttribute(&quot;id&quot;, id + suffix);
+			var id = node.getAttribute("id")
+				replace["#" + id] = id + suffix;
+			node.setAttribute("id", id + suffix);
 		}
 
-		if ((node.nodeName == &quot;use&quot;) &amp;&amp; (node.getAttributeNS(NSS[&quot;xlink&quot;], &quot;href&quot;)) &amp;&amp; (replace[node.getAttribute(NSS[&quot;xlink&quot;], &quot;href&quot;)]))
-			node.setAttribute(NSS[&quot;xlink&quot;], &quot;href&quot;, node.getAttribute(NSS[&quot;xlink&quot;], &quot;href&quot;) + suffix);
+		if ((node.nodeName == "use") && (node.getAttributeNS(NSS["xlink"], "href")) && (replace[node.getAttribute(NSS["xlink"], "href")]))
+			node.setAttribute(NSS["xlink"], "href", node.getAttribute(NSS["xlink"], "href") + suffix);
 
 		if (node.childNodes)
 		{
-			for (var counter = 0; counter &lt; node.childNodes.length; counter++)
+			for (var counter = 0; counter < node.childNodes.length; counter++)
 				suffixNoneIds_sub(node.childNodes[counter], suffix, replace);
 		}
 	}
@@ -2045,26 +2045,26 @@ function suffixNodeIds(node, suffix)
  */
 function createProgressBar(parent_node)
 {
-	var g = document.createElementNS(NSS[&quot;svg&quot;], &quot;g&quot;);
-	g.setAttribute(&quot;clip-path&quot;, &quot;url(#jessyInkSlideClipPath)&quot;);
-	g.setAttribute(&quot;id&quot;, &quot;layer_progress_bar&quot;);
-	g.setAttribute(&quot;style&quot;, &quot;display: none;&quot;);
+	var g = document.createElementNS(NSS["svg"], "g");
+	g.setAttribute("clip-path", "url(#jessyInkSlideClipPath)");
+	g.setAttribute("id", "layer_progress_bar");
+	g.setAttribute("style", "display: none;");
 
-	var rect_progress_bar = document.createElementNS(NSS[&quot;svg&quot;], &quot;rect&quot;);
-	rect_progress_bar.setAttribute(&quot;style&quot;, &quot;marker: none; fill: rgb(128, 128, 128); stroke: none;&quot;);
-	rect_progress_bar.setAttribute(&quot;id&quot;, &quot;rect_progress_bar&quot;);
-	rect_progress_bar.setAttribute(&quot;x&quot;, 0);
-	rect_progress_bar.setAttribute(&quot;y&quot;, 0.99 * HEIGHT);
-	rect_progress_bar.setAttribute(&quot;width&quot;, 0);
-	rect_progress_bar.setAttribute(&quot;height&quot;, 0.01 * HEIGHT);
+	var rect_progress_bar = document.createElementNS(NSS["svg"], "rect");
+	rect_progress_bar.setAttribute("style", "marker: none; fill: rgb(128, 128, 128); stroke: none;");
+	rect_progress_bar.setAttribute("id", "rect_progress_bar");
+	rect_progress_bar.setAttribute("x", 0);
+	rect_progress_bar.setAttribute("y", 0.99 * HEIGHT);
+	rect_progress_bar.setAttribute("width", 0);
+	rect_progress_bar.setAttribute("height", 0.01 * HEIGHT);
 	g.appendChild(rect_progress_bar);
 
-	var circle_timer_indicator = document.createElementNS(NSS[&quot;svg&quot;], &quot;circle&quot;);
-	circle_timer_indicator.setAttribute(&quot;style&quot;, &quot;marker: none; fill: rgb(255, 0, 0); stroke: none;&quot;);
-	circle_timer_indicator.setAttribute(&quot;id&quot;, &quot;circle_timer_indicator&quot;);
-	circle_timer_indicator.setAttribute(&quot;cx&quot;, 0.005 * HEIGHT);
-	circle_timer_indicator.setAttribute(&quot;cy&quot;, 0.995 * HEIGHT);
-	circle_timer_indicator.setAttribute(&quot;r&quot;, 0.005 * HEIGHT);
+	var circle_timer_indicator = document.createElementNS(NSS["svg"], "circle");
+	circle_timer_indicator.setAttribute("style", "marker: none; fill: rgb(255, 0, 0); stroke: none;");
+	circle_timer_indicator.setAttribute("id", "circle_timer_indicator");
+	circle_timer_indicator.setAttribute("cx", 0.005 * HEIGHT);
+	circle_timer_indicator.setAttribute("cy", 0.995 * HEIGHT);
+	circle_timer_indicator.setAttribute("r", 0.005 * HEIGHT);
 	g.appendChild(circle_timer_indicator);
 
 	parent_node.appendChild(g);
@@ -2075,14 +2075,14 @@ function createProgressBar(parent_node)
  */
 function hideProgressBar()
 {
-	var progress_bar = document.getElementById(&quot;layer_progress_bar&quot;);
+	var progress_bar = document.getElementById("layer_progress_bar");
 
 	if (!progress_bar)
 	{
 		return;
 	}
 
-	progress_bar.setAttribute(&quot;style&quot;, &quot;display: none;&quot;);
+	progress_bar.setAttribute("style", "display: none;");
 }
 
 /** Function to show the progress bar.
@@ -2090,14 +2090,14 @@ function hideProgressBar()
  */
 function showProgressBar()
 {
-	var progress_bar = document.getElementById(&quot;layer_progress_bar&quot;);
+	var progress_bar = document.getElementById("layer_progress_bar");
 
 	if (!progress_bar)
 	{
 		return;
 	}
 
-	progress_bar.setAttribute(&quot;style&quot;, &quot;display: inherit;&quot;);
+	progress_bar.setAttribute("style", "display: inherit;");
 }
 
 /** Set progress bar value.
@@ -2107,20 +2107,20 @@ function showProgressBar()
  */
 function setProgressBarValue(value)
 {
-	var rect_progress_bar = document.getElementById(&quot;rect_progress_bar&quot;);
+	var rect_progress_bar = document.getElementById("rect_progress_bar");
 
 	if (!rect_progress_bar)
 	{
 		return;
 	}
 
-	if (value &lt; 1)
+	if (value < 1)
 	{
 		// First slide, assumed to be the title of the presentation
 		var x = 0;
 		var w = 0.01 * HEIGHT;
 	}
-	else if (value &gt;= slides.length - 1)
+	else if (value >= slides.length - 1)
 	{
 		// Last slide, assumed to be the end of the presentation
 		var x = WIDTH - 0.01 * HEIGHT;
@@ -2135,8 +2135,8 @@ function setProgressBarValue(value)
 		var w = WIDTH / (slides.length - 2);
 	}
 
-	rect_progress_bar.setAttribute(&quot;x&quot;, x);
-	rect_progress_bar.setAttribute(&quot;width&quot;, w);
+	rect_progress_bar.setAttribute("x", x);
+	rect_progress_bar.setAttribute("width", w);
 }
 
 /** Set time indicator.
@@ -2146,25 +2146,25 @@ function setProgressBarValue(value)
  */
 function setTimeIndicatorValue(value)
 {
-	var circle_timer_indicator = document.getElementById(&quot;circle_timer_indicator&quot;);
+	var circle_timer_indicator = document.getElementById("circle_timer_indicator");
 
 	if (!circle_timer_indicator)
 	{
 		return;
 	}
 
-	if (value &lt; 0.0)
+	if (value < 0.0)
 	{
 		value = 0.0;
 	}
 
-	if (value &gt; 1.0)
+	if (value > 1.0)
 	{
 		value = 1.0;
 	}
 
 	var cx = (WIDTH - 0.01 * HEIGHT) * value + 0.005 * HEIGHT;
-	circle_timer_indicator.setAttribute(&quot;cx&quot;, cx);
+	circle_timer_indicator.setAttribute("cx", cx);
 }
 
 /** Update timer.
@@ -2188,10 +2188,10 @@ function calcCoord(e)
 	svgPoint.x = e.clientX + window.pageXOffset;
 	svgPoint.y = e.clientY + window.pageYOffset;
 
-	var matrix = slides[activeSlide][&quot;element&quot;].getScreenCTM();
+	var matrix = slides[activeSlide]["element"].getScreenCTM();
 
-	if (slides[activeSlide][&quot;viewGroup&quot;])
-		matrix = slides[activeSlide][&quot;viewGroup&quot;].getScreenCTM();
+	if (slides[activeSlide]["viewGroup"])
+		matrix = slides[activeSlide]["viewGroup"].getScreenCTM();
 
 	svgPoint = svgPoint.matrixTransform(matrix.inverse());
 	return svgPoint;
@@ -2205,93 +2205,93 @@ function addSlide(after_slide)
 {
 	number_of_added_slides++;
 
-	var g = document.createElementNS(NSS[&quot;svg&quot;], &quot;g&quot;);
-	g.setAttribute(&quot;clip-path&quot;, &quot;url(#jessyInkSlideClipPath)&quot;);
-	g.setAttribute(&quot;id&quot;, &quot;Whiteboard &quot; + Date() + &quot; presentation copy&quot;);
-	g.setAttribute(&quot;style&quot;, &quot;display: none;&quot;);
+	var g = document.createElementNS(NSS["svg"], "g");
+	g.setAttribute("clip-path", "url(#jessyInkSlideClipPath)");
+	g.setAttribute("id", "Whiteboard " + Date() + " presentation copy");
+	g.setAttribute("style", "display: none;");
 
 	var new_slide = new Object();
-	new_slide[&quot;element&quot;] = g;
+	new_slide["element"] = g;
 
 	// Set build in transition.
-	new_slide[&quot;transitionIn&quot;] = new Object();
+	new_slide["transitionIn"] = new Object();
 	var dict = defaultTransitionInDict;
-	new_slide[&quot;transitionIn&quot;][&quot;name&quot;] = dict[&quot;name&quot;];
-	new_slide[&quot;transitionIn&quot;][&quot;options&quot;] = new Object();
+	new_slide["transitionIn"]["name"] = dict["name"];
+	new_slide["transitionIn"]["options"] = new Object();
 
 	for (key in dict)
-		if (key != &quot;name&quot;)
-			new_slide[&quot;transitionIn&quot;][&quot;options&quot;][key] = dict[key];
+		if (key != "name")
+			new_slide["transitionIn"]["options"][key] = dict[key];
 
 	// Set build out transition.
-	new_slide[&quot;transitionOut&quot;] = new Object();
+	new_slide["transitionOut"] = new Object();
 	dict = defaultTransitionOutDict;
-	new_slide[&quot;transitionOut&quot;][&quot;name&quot;] = dict[&quot;name&quot;];
-	new_slide[&quot;transitionOut&quot;][&quot;options&quot;] = new Object();
+	new_slide["transitionOut"]["name"] = dict["name"];
+	new_slide["transitionOut"]["options"] = new Object();
 
 	for (key in dict)
-		if (key != &quot;name&quot;)
-			new_slide[&quot;transitionOut&quot;][&quot;options&quot;][key] = dict[key];
+		if (key != "name")
+			new_slide["transitionOut"]["options"][key] = dict[key];
 
 	// Copy master slide content.
 	if (masterSlide)
 	{
-		var clonedNode = suffixNodeIds(masterSlide.cloneNode(true), &quot;_&quot; + Date() + &quot; presentation_copy&quot;);
-		clonedNode.removeAttributeNS(NSS[&quot;inkscape&quot;], &quot;groupmode&quot;);
-		clonedNode.removeAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;);
-		clonedNode.style.display = &quot;inherit&quot;;
+		var clonedNode = suffixNodeIds(masterSlide.cloneNode(true), "_" + Date() + " presentation_copy");
+		clonedNode.removeAttributeNS(NSS["inkscape"], "groupmode");
+		clonedNode.removeAttributeNS(NSS["inkscape"], "label");
+		clonedNode.style.display = "inherit";
 
 		g.appendChild(clonedNode);
 	}
 
 	// Substitute auto texts.
-	substituteAutoTexts(g, &quot;Whiteboard &quot; + number_of_added_slides, &quot;W&quot; + number_of_added_slides, slides.length);
+	substituteAutoTexts(g, "Whiteboard " + number_of_added_slides, "W" + number_of_added_slides, slides.length);
 
-	g.setAttribute(&quot;onmouseover&quot;, &quot;if ((currentMode == INDEX_MODE) &amp;&amp; ( activeSlide != &quot; + (after_slide + 1) + &quot;)) { indexSetActiveSlide(&quot; + (after_slide + 1) + &quot;); };&quot;);
+	g.setAttribute("onmouseover", "if ((currentMode == INDEX_MODE) && ( activeSlide != " + (after_slide + 1) + ")) { indexSetActiveSlide(" + (after_slide + 1) + "); };");
 
 	// Create a transform group.
-	var transformGroup = document.createElementNS(NSS[&quot;svg&quot;], &quot;g&quot;);
+	var transformGroup = document.createElementNS(NSS["svg"], "g");
 
 	// Add content to transform group.
 	while (g.firstChild)
 		transformGroup.appendChild(g.firstChild);
 
 	// Transfer the transform attribute from the node to the transform group.
-	if (g.getAttribute(&quot;transform&quot;))
+	if (g.getAttribute("transform"))
 	{
-		transformGroup.setAttribute(&quot;transform&quot;, g.getAttribute(&quot;transform&quot;));
-		g.removeAttribute(&quot;transform&quot;);
+		transformGroup.setAttribute("transform", g.getAttribute("transform"));
+		g.removeAttribute("transform");
 	}
 
 	// Create a view group.
-	var viewGroup = document.createElementNS(NSS[&quot;svg&quot;], &quot;g&quot;);
+	var viewGroup = document.createElementNS(NSS["svg"], "g");
 
 	viewGroup.appendChild(transformGroup);
-	new_slide[&quot;viewGroup&quot;] = g.appendChild(viewGroup);
+	new_slide["viewGroup"] = g.appendChild(viewGroup);
 
 	// Insert background.
 	if (BACKGROUND_COLOR != null)
 	{
-		var rectNode = document.createElementNS(NSS[&quot;svg&quot;], &quot;rect&quot;);
+		var rectNode = document.createElementNS(NSS["svg"], "rect");
 
-		rectNode.setAttribute(&quot;x&quot;, 0);
-		rectNode.setAttribute(&quot;y&quot;, 0);
-		rectNode.setAttribute(&quot;width&quot;, WIDTH);
-		rectNode.setAttribute(&quot;height&quot;, HEIGHT);
-		rectNode.setAttribute(&quot;id&quot;, &quot;jessyInkBackground&quot; + Date());
-		rectNode.setAttribute(&quot;fill&quot;, BACKGROUND_COLOR);
+		rectNode.setAttribute("x", 0);
+		rectNode.setAttribute("y", 0);
+		rectNode.setAttribute("width", WIDTH);
+		rectNode.setAttribute("height", HEIGHT);
+		rectNode.setAttribute("id", "jessyInkBackground" + Date());
+		rectNode.setAttribute("fill", BACKGROUND_COLOR);
 
-		new_slide[&quot;viewGroup&quot;].insertBefore(rectNode, new_slide[&quot;viewGroup&quot;].firstChild);
+		new_slide["viewGroup"].insertBefore(rectNode, new_slide["viewGroup"].firstChild);
 	}
 
 	// Set initial view even if there are no other views.
 	var matrixOld = (new matrixSVG()).fromElements(1, 0, 0, 0, 1, 0, 0, 0, 1);
 
-	new_slide[&quot;viewGroup&quot;].setAttribute(&quot;transform&quot;, matrixOld.toAttribute());
+	new_slide["viewGroup"].setAttribute("transform", matrixOld.toAttribute());
 	new_slide.initialView = matrixOld.toAttribute();
 
 	// Insert slide
-	var node = slides[after_slide][&quot;element&quot;];
+	var node = slides[after_slide]["element"];
 	var next_node = node.nextSibling;
 	var parent_node = node.parentNode;
 
@@ -2304,16 +2304,16 @@ function addSlide(after_slide)
 		parent_node.appendChild(g);
 	}
 
-	g = document.createElementNS(NSS[&quot;svg&quot;], &quot;g&quot;);
-	g.setAttributeNS(NSS[&quot;inkscape&quot;], &quot;groupmode&quot;, &quot;layer&quot;);
-	g.setAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;, &quot;Whiteboard &quot; + number_of_added_slides);
-	g.setAttribute(&quot;clip-path&quot;, &quot;url(#jessyInkSlideClipPath)&quot;);
-	g.setAttribute(&quot;id&quot;, &quot;Whiteboard &quot; + Date());
-	g.setAttribute(&quot;style&quot;, &quot;display: none;&quot;);
+	g = document.createElementNS(NSS["svg"], "g");
+	g.setAttributeNS(NSS["inkscape"], "groupmode", "layer");
+	g.setAttributeNS(NSS["inkscape"], "label", "Whiteboard " + number_of_added_slides);
+	g.setAttribute("clip-path", "url(#jessyInkSlideClipPath)");
+	g.setAttribute("id", "Whiteboard " + Date());
+	g.setAttribute("style", "display: none;");
 
-	new_slide[&quot;original_element&quot;] = g;
+	new_slide["original_element"] = g;
 
-	node = slides[after_slide][&quot;original_element&quot;];
+	node = slides[after_slide]["original_element"];
 	next_node = node.nextSibling;
 	parent_node = node.parentNode;
 
@@ -2331,9 +2331,9 @@ function addSlide(after_slide)
 	slides = before_new_slide.concat(new_slide, after_new_slide);
 
 	//resetting the counter attributes on the slides that follow the new slide...
-	for (var counter = after_slide+2; counter &lt; slides.length; counter++)
+	for (var counter = after_slide+2; counter < slides.length; counter++)
 	{
-		slides[counter][&quot;element&quot;].setAttribute(&quot;onmouseover&quot;, &quot;if ((currentMode == INDEX_MODE) &amp;&amp; ( activeSlide != &quot; + counter + &quot;)) { indexSetActiveSlide(&quot; + counter + &quot;); };&quot;);
+		slides[counter]["element"].setAttribute("onmouseover", "if ((currentMode == INDEX_MODE) && ( activeSlide != " + counter + ")) { indexSetActiveSlide(" + counter + "); };");
 	}
 }
 
@@ -2366,7 +2366,7 @@ function rectToMatrix(rect)
 	scaleX = WIDTH / rectWidth;
 	scaleY = HEIGHT / rectHeight;
 
-	if (scaleX &gt; scaleY)
+	if (scaleX > scaleY)
 	{
 		scaleX = scaleY;
 		rectXcorr -= (WIDTH / scaleX - rectWidth) / 2;
@@ -2379,7 +2379,7 @@ function rectToMatrix(rect)
 		rectHeight = HEIGHT / scaleY;
 	}
 
-	if (rect.transform.baseVal.numberOfItems &lt; 1)
+	if (rect.transform.baseVal.numberOfItems < 1)
 	{
 		mRectTrans = (new matrixSVG()).fromElements(1, 0, 0, 0, 1, 0, 0, 0, 1);
 	}
@@ -2409,31 +2409,31 @@ function handleElement(node)
 		var y;
 		var transform;
 
-		var tspans = node.getElementsByTagNameNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;tspan&quot;);
+		var tspans = node.getElementsByTagNameNS("http://www.w3.org/2000/svg", "tspan");
 
-		for (var tspanCounter = 0; tspanCounter &lt; tspans.length; tspanCounter++)
+		for (var tspanCounter = 0; tspanCounter < tspans.length; tspanCounter++)
 		{
-			if (tspans[tspanCounter].getAttributeNS(&quot;https://launchpad.net/jessyink&quot;, &quot;video&quot;) == &quot;url&quot;)
+			if (tspans[tspanCounter].getAttributeNS("https://launchpad.net/jessyink", "video") == "url")
 			{
 				url = tspans[tspanCounter].firstChild.nodeValue;
 			}
 		}
 
-		var rects = node.getElementsByTagNameNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;rect&quot;);
+		var rects = node.getElementsByTagNameNS("http://www.w3.org/2000/svg", "rect");
 
-		for (var rectCounter = 0; rectCounter &lt; rects.length; rectCounter++)
+		for (var rectCounter = 0; rectCounter < rects.length; rectCounter++)
 		{
-			if (rects[rectCounter].getAttributeNS(&quot;https://launchpad.net/jessyink&quot;, &quot;video&quot;) == &quot;rect&quot;)
+			if (rects[rectCounter].getAttributeNS("https://launchpad.net/jessyink", "video") == "rect")
 			{
-				x = rects[rectCounter].getAttribute(&quot;x&quot;);
-				y = rects[rectCounter].getAttribute(&quot;y&quot;);
-				width = rects[rectCounter].getAttribute(&quot;width&quot;);
-				height = rects[rectCounter].getAttribute(&quot;height&quot;);
-				transform = rects[rectCounter].getAttribute(&quot;transform&quot;);
+				x = rects[rectCounter].getAttribute("x");
+				y = rects[rectCounter].getAttribute("y");
+				width = rects[rectCounter].getAttribute("width");
+				height = rects[rectCounter].getAttribute("height");
+				transform = rects[rectCounter].getAttribute("transform");
 			}
 		}
 
-		for (var childCounter = 0; childCounter &lt; node.childNodes.length; childCounter++)
+		for (var childCounter = 0; childCounter < node.childNodes.length; childCounter++)
 		{
 			if (node.childNodes[childCounter].nodeType == 1)
 			{
@@ -2443,20 +2443,20 @@ function handleElement(node)
 				}
 				else
 				{
-					node.childNodes[childCounter].setAttribute(&quot;style&quot;, &quot;display: none;&quot;);
+					node.childNodes[childCounter].setAttribute("style", "display: none;");
 				}
 			}
 		}
 
-		var foreignNode = document.createElementNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;foreignObject&quot;);
-		foreignNode.setAttribute(&quot;x&quot;, x);
-		foreignNode.setAttribute(&quot;y&quot;, y);
-		foreignNode.setAttribute(&quot;width&quot;, width);
-		foreignNode.setAttribute(&quot;height&quot;, height);
-		foreignNode.setAttribute(&quot;transform&quot;, transform);
+		var foreignNode = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+		foreignNode.setAttribute("x", x);
+		foreignNode.setAttribute("y", y);
+		foreignNode.setAttribute("width", width);
+		foreignNode.setAttribute("height", height);
+		foreignNode.setAttribute("transform", transform);
 
-		var videoNode = document.createElementNS(&quot;http://www.w3.org/1999/xhtml&quot;, &quot;video&quot;);
-		videoNode.setAttribute(&quot;src&quot;, url);
+		var videoNode = document.createElementNS("http://www.w3.org/1999/xhtml", "video");
+		videoNode.setAttribute("src", url);
 
 		foreignNode.appendChild(videoNode);
 		node.appendChild(foreignNode);
@@ -2477,7 +2477,7 @@ function LocationHash(str)
 	var parts = str.split('_');
 
 	// Try to extract slide number.
-	if (parts.length &gt;= 1)
+	if (parts.length >= 1)
 	{
 		try
 		{
@@ -2494,7 +2494,7 @@ function LocationHash(str)
 	}
 	
 	// Try to extract effect number.
-	if (parts.length &gt;= 2)
+	if (parts.length >= 2)
 	{
 		try
 		{
@@ -2598,7 +2598,7 @@ matrixSVG.prototype.fromElements = function(e11, e12, e13, e21, e22, e23, e31, e
 
 /** Constructor function.
  *
- *	@param attrString string value of the &quot;transform&quot; attribute (currently only &quot;matrix&quot; is accepted)
+ *	@param attrString string value of the "transform" attribute (currently only "matrix" is accepted)
  */
 matrixSVG.prototype.fromAttribute = function(attrString)
 {
@@ -2606,11 +2606,11 @@ matrixSVG.prototype.fromAttribute = function(attrString)
 
 	str = str.trim();
 
-	strArray = str.split(&quot;,&quot;);
+	strArray = str.split(",");
 
 	// Opera does not use commas to separate the values of the matrix, only spaces.
 	if (strArray.length != 6)
-		strArray = str.split(&quot; &quot;);
+		strArray = str.split(" ");
 
 	this.e11 = parseFloat(strArray[0]);
 	this.e21 = parseFloat(strArray[1]);
@@ -2627,11 +2627,11 @@ matrixSVG.prototype.fromAttribute = function(attrString)
 
 /** Output function
  *
- *	@return a string that can be used as the &quot;transform&quot; attribute.
+ *	@return a string that can be used as the "transform" attribute.
  */
 matrixSVG.prototype.toAttribute = function()
 {
-	return &quot;matrix(&quot; + this.e11 + &quot;, &quot; + this.e21 + &quot;, &quot; + this.e12 + &quot;, &quot; + this.e22 + &quot;, &quot; + this.e13 + &quot;, &quot; + this.e23 + &quot;)&quot;;
+	return "matrix(" + this.e11 + ", " + this.e21 + ", " + this.e12 + ", " + this.e22 + ", " + this.e13 + ", " + this.e23 + ")";
 }
 
 /** Matrix nversion.
@@ -2704,7 +2704,7 @@ matrixSVG.prototype.add = function(op)
 /** Matrix mixing.
  *
  *	@param op another svg matrix
- *	@parma contribOp contribution of the other matrix (0 &lt;= contribOp &lt;= 1)
+ *	@parma contribOp contribution of the other matrix (0 <= contribOp <= 1)
  *	@return (1 - contribOp) * this + contribOp * op
  */
 matrixSVG.prototype.mix = function(op, contribOp)
