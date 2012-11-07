@@ -85,10 +85,11 @@ function jessyInkInit()
 				masterSlide = nodes[counter];
 			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label") && nodes[counter].getAttributeNS(NSS["jessyink"], "presentationLayer") == "presentationLayer")
 				existingJessyInkPresentationLayer = nodes[counter];
-			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label").substring(0,1) == '_') {
-				console.log('found special layer; hiding...');
+			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label").substring(0,1) == '_')
 				nodes[counter].setAttribute('style','display:none');
-			} else
+			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label").substring(0,1) == '!')
+				masterSlide = nodes[counter];
+			else
 				tempSlides.push(nodes[counter].getAttribute("id"));
 		}
 		else if (nodes[counter].getAttributeNS(NSS['jessyink'], 'element'))

@@ -17,6 +17,11 @@ function substituteAutoTexts(node, slideName, slideNumber, numberOfSlides)
 			texts[textCounter].firstChild.nodeValue = numberOfSlides;
 		else if (texts[textCounter].getAttributeNS(NSS["jessyink"], "autoText") == "slideTitle")
 			texts[textCounter].firstChild.nodeValue = slideName;
+
+		texts[textCounter].textContent= texts[textCounter].textContent
+			.replace('\\title',slideName)
+			.replace('\\page',slideNumber)
+			.replace('\\total',numberOfSlides);
 	}
 }
 

@@ -49,21 +49,38 @@
   </metadata>
   <g
      inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="layer 1"
-     style="display:inline">
+     id="layer5"
+     inkscape:label="!master">
     <text
        xml:space="preserve"
-       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Helvetica"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Sans"
+       x="1035.5996"
+       y="921.03168"
+       id="text2992-4-0"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2994-9-03"
+         x="1035.5996"
+         y="921.03168"
+         style="font-size:60px;font-weight:normal;-inkscape-font-specification:Sans"># \page/\total</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Helvetica"
        x="41.140759"
-       y="93.624039"
+       y="93.624031"
        id="text2992"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan2994"
          x="41.140759"
-         y="93.624039"
-         style="font-size:60px;font-weight:bold;-inkscape-font-specification:Sans Bold">Layer 1</tspan></text>
+         y="93.624031"
+         style="font-size:60px;font-weight:bold;-inkscape-font-specification:Sans Bold">\title</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="first slide"
+     style="display:inline">
     <g
        id="jessyink"
        transform="translate(-20.818001,-262.07038)">
@@ -1120,10 +1137,11 @@ function jessyInkInit()
 				masterSlide = nodes[counter];
 			else if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;) &amp;&amp; nodes[counter].getAttributeNS(NSS[&quot;jessyink&quot;], &quot;presentationLayer&quot;) == &quot;presentationLayer&quot;)
 				existingJessyInkPresentationLayer = nodes[counter];
-			else if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;).substring(0,1) == '_') {
-				console.log('found special layer; hiding...');
+			else if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;).substring(0,1) == '_')
 				nodes[counter].setAttribute('style','display:none');
-			} else
+			else if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;).substring(0,1) == '!')
+				masterSlide = nodes[counter];
+			else
 				tempSlides.push(nodes[counter].getAttribute(&quot;id&quot;));
 		}
 		else if (nodes[counter].getAttributeNS(NSS['jessyink'], 'element'))
@@ -2298,6 +2316,11 @@ function substituteAutoTexts(node, slideName, slideNumber, numberOfSlides)
 			texts[textCounter].firstChild.nodeValue = numberOfSlides;
 		else if (texts[textCounter].getAttributeNS(NSS[&quot;jessyink&quot;], &quot;autoText&quot;) == &quot;slideTitle&quot;)
 			texts[textCounter].firstChild.nodeValue = slideName;
+
+		texts[textCounter].textContent= texts[textCounter].textContent
+			.replace('\\title',slideName)
+			.replace('\\page',slideNumber)
+			.replace('\\total',numberOfSlides);
 	}
 }
 
@@ -3016,21 +3039,8 @@ String.prototype.trim = function()
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="layer 2"
-     style="display:inline">
-    <text
-       xml:space="preserve"
-       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Helvetica"
-       x="41.140762"
-       y="93.624031"
-       id="text2992-4"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan2994-9"
-         x="41.140762"
-         y="93.624031"
-         style="font-size:60px;font-weight:bold;-inkscape-font-specification:Sans Bold">Layer 2</tspan></text>
-  </g>
+     inkscape:label="second slide"
+     style="display:inline" />
   <g
      inkscape:groupmode="layer"
      id="layer4"
