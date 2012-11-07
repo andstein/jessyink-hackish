@@ -24,11 +24,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.41321553"
-     inkscape:cx="-152.43537"
-     inkscape:cy="628.64242"
+     inkscape:zoom="0.584375"
+     inkscape:cx="640"
+     inkscape:cy="480"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer4"
      showgrid="false"
      inkscape:window-width="1440"
      inkscape:window-height="782"
@@ -51,7 +51,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="layer 1"
-     style="display:inline">
+     style="display:none">
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Helvetica"
@@ -521,6 +521,26 @@ function skipEffects(dir)
 	{
 		changeSlide(dir);
 	}
+}
+
+/** tries to find specially formatted text element in group
+ *
+ * @param node group that is tested for direct child node with text
+ * @return object with information of parsed text
+ * @see tryParseDict for formatting of special text nodes
+ */
+function tryFindGroupDict(node) {
+    for(var i=0; i&lt;node.childNodes.length; i++) 
+    {
+        var child= node.childNodes[i];
+        if (child.tagName == 'text' &amp;&amp; child.childNodes.length==1 &amp;&amp; child.childNodes[0].tagName == 'tspan') {
+            var text = child.childNodes[0].textContent;
+            var obj = tryParseDict(text);
+            if (obj) return obj;
+        }
+    }
+
+    return undefined
 }
 
 /** Function to handle JessyInk elements.
@@ -1100,13 +1120,14 @@ function jessyInkInit()
 				masterSlide = nodes[counter];
 			else if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;) &amp;&amp; nodes[counter].getAttributeNS(NSS[&quot;jessyink&quot;], &quot;presentationLayer&quot;) == &quot;presentationLayer&quot;)
 				existingJessyInkPresentationLayer = nodes[counter];
-			else
+			else if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;).substring(0,1) == '_') {
+                console.log('found special layer; hiding...');
+                nodes[counter].setAttribute('style','display:none');
+            } else
 				tempSlides.push(nodes[counter].getAttribute(&quot;id&quot;));
 		}
 		else if (nodes[counter].getAttributeNS(NSS['jessyink'], 'element'))
-		{
 			handleElement(nodes[counter]);
-		}
 	}
 
 	// Hide master slide set default transitions.
@@ -1270,6 +1291,24 @@ function jessyInkInit()
 					tempEffects[dict[&quot;order&quot;]] = new Array();
 
 				tempEffects[dict[&quot;order&quot;]][tempEffects[dict[&quot;order&quot;]].length] = effectDict;
+			}
+		}
+
+		// do the same for groups with '{{...}}' effect specifier texts
+		var candidates = node.getElementsByTagNameNS(NSS[&quot;svg&quot;], &quot;g&quot;);
+		for(var i=0; i&lt;candidates.length; i++) 
+		{
+			var obj = tryFindGroupDict(candidates[i]);
+			if (obj) 
+			{
+				console.log('found obj=' + obj);
+				var id= candidates[i].getAttribute('id');
+				var effectDict= { effect:'appear',dir:1,element:candidates[i],order:obj.order,options:{} };
+				for(var key in obj)
+					effectDict.options[key] = obj[key];
+
+				if (!tempEffects[obj.order])tempEffects[obj.order]= new Array();
+				tempEffects[obj.order].push( effectDict );
 			}
 		}
 
@@ -2730,6 +2769,28 @@ function padString(str, len)
 	return outStr;
 }
 
+/** Convenience function to parse string and generate object
+ *
+ * @param label like 'text text {{5;name:value;name2:value2}} '
+ * @return like {order:2,name:value,name2:value2} or undefined
+ */
+function tryParseDict(label) {
+    var i1= label.indexOf('{{');
+    var i2= label.indexOf('}}');
+    if (i1==-1 || i2==-1) return undefined;
+    var list = label.substr(i1+2,i2-(i1+2)).split(';');
+    var ret= new Object();
+
+    for(var i=0; i&lt;list.length; i++) {
+        var j= list[i].indexOf(':');
+        if (j==-1)
+            ret.order = list[i];
+        else
+            ret[list[i].substr(0,j)] = list[i].substr(j+1);
+    }
+
+    return ret;
+}
 
 /** Convenience function to translate a attribute string into a dictionary.
  *
@@ -2952,5 +3013,22 @@ String.prototype.trim = function()
          x="41.140762"
          y="93.624031"
          style="font-size:60px;font-weight:bold;-inkscape-font-specification:Sans Bold">Layer 2</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="_hidden_layer">
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Helvetica"
+       x="41.140762"
+       y="93.624031"
+       id="text2992-4-5"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2994-9-0"
+         x="41.140762"
+         y="93.624031"
+         style="font-size:60px;font-weight:bold;-inkscape-font-specification:Sans Bold">(this layer is never shown)</tspan></text>
   </g>
 </svg>

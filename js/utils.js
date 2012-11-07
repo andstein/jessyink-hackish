@@ -12,6 +12,28 @@ function padString(str, len)
 	return outStr;
 }
 
+/** Convenience function to parse string and generate object
+ *
+ * @param label like 'text text {{5;name:value;name2:value2}} '
+ * @return like {order:2,name:value,name2:value2} or undefined
+ */
+function tryParseDict(label) {
+	var i1= label.indexOf('{{');
+		var i2= label.indexOf('}}');
+	if (i1==-1 || i2==-1) return undefined;
+	var list = label.substr(i1+2,i2-(i1+2)).split(';');
+	var ret= new Object();
+
+	for(var i=0; i<list.length; i++) {
+		var j= list[i].indexOf(':');
+		if (j==-1)
+			ret.order = list[i];
+		else
+			ret[list[i].substr(0,j)] = list[i].substr(j+1);
+	}
+
+	return ret;
+}
 
 /** Convenience function to translate a attribute string into a dictionary.
  *

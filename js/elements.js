@@ -1,4 +1,24 @@
 
+/** tries to find specially formatted text element in group
+ *
+ * @param node group that is tested for direct child node with text
+ * @return object with information of parsed text
+ * @see tryParseDict for formatting of special text nodes
+ */
+function tryFindGroupDict(node) {
+	for(var i=0; i<node.childNodes.length; i++) 
+	{
+		var child= node.childNodes[i];
+		if (child.tagName == 'text' && child.childNodes.length==1 && child.childNodes[0].tagName == 'tspan') {
+			var text = child.childNodes[0].textContent;
+			var obj = tryParseDict(text);
+			if (obj) return obj;
+		}
+	}
+
+	return undefined
+}
+
 /** Function to handle JessyInk elements.
  *
  *	@param	node	Element node.

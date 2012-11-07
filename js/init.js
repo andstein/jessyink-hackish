@@ -85,13 +85,14 @@ function jessyInkInit()
 				masterSlide = nodes[counter];
 			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label") && nodes[counter].getAttributeNS(NSS["jessyink"], "presentationLayer") == "presentationLayer")
 				existingJessyInkPresentationLayer = nodes[counter];
-			else
+			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label").substring(0,1) == '_') {
+				console.log('found special layer; hiding...');
+				nodes[counter].setAttribute('style','display:none');
+			} else
 				tempSlides.push(nodes[counter].getAttribute("id"));
 		}
 		else if (nodes[counter].getAttributeNS(NSS['jessyink'], 'element'))
-		{
 			handleElement(nodes[counter]);
-		}
 	}
 
 	// Hide master slide set default transitions.
@@ -255,6 +256,24 @@ function jessyInkInit()
 					tempEffects[dict["order"]] = new Array();
 
 				tempEffects[dict["order"]][tempEffects[dict["order"]].length] = effectDict;
+			}
+		}
+
+		// do the same for groups with '{{...}}' effect specifier texts
+		var candidates = node.getElementsByTagNameNS(NSS["svg"], "g");
+		for(var i=0; i<candidates.length; i++) 
+		{
+			var obj = tryFindGroupDict(candidates[i]);
+			if (obj) 
+			{
+				console.log('found obj=' + obj);
+				var id= candidates[i].getAttribute('id');
+				var effectDict= { effect:'appear',dir:1,element:candidates[i],order:obj.order,options:{} };
+				for(var key in obj)
+					effectDict.options[key] = obj[key];
+
+				if (!tempEffects[obj.order])tempEffects[obj.order]= new Array();
+				tempEffects[obj.order].push( effectDict );
 			}
 		}
 
