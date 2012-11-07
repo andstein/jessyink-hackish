@@ -268,11 +268,17 @@ function jessyInkInit()
 			{
 				console.log('found obj=' + obj);
 				var id= candidates[i].getAttribute('id');
-				var effectDict= { effect:'appear',dir:1,element:candidates[i],order:obj.order,options:{} };
-				for(var key in obj)
-					effectDict.options[key] = obj[key];
+				var effectDict= { 
+					dir:1,
+					element:candidates[i],
+					order:obj.order,
+					effect:obj.name || 'appear',
+					options:obj,
+				};
 
-				if (!tempEffects[obj.order])tempEffects[obj.order]= new Array();
+				if (!tempEffects[obj.order])
+					tempEffects[obj.order]= new Array();
+
 				tempEffects[obj.order].push( effectDict );
 			}
 		}

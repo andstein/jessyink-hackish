@@ -24,17 +24,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.584375"
+     inkscape:zoom="0.2921875"
      inkscape:cx="640"
      inkscape:cy="480"
      inkscape:document-units="px"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:window-width="1440"
      inkscape:window-height="782"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="0" />
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata3105">
     <rdf:RDF>
@@ -51,7 +51,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="layer 1"
-     style="display:none">
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Helvetica"
@@ -530,17 +530,17 @@ function skipEffects(dir)
  * @see tryParseDict for formatting of special text nodes
  */
 function tryFindGroupDict(node) {
-    for(var i=0; i&lt;node.childNodes.length; i++) 
-    {
-        var child= node.childNodes[i];
-        if (child.tagName == 'text' &amp;&amp; child.childNodes.length==1 &amp;&amp; child.childNodes[0].tagName == 'tspan') {
-            var text = child.childNodes[0].textContent;
-            var obj = tryParseDict(text);
-            if (obj) return obj;
-        }
-    }
+	for(var i=0; i&lt;node.childNodes.length; i++) 
+	{
+		var child= node.childNodes[i];
+		if (child.tagName == 'text' &amp;&amp; child.childNodes.length==1 &amp;&amp; child.childNodes[0].tagName == 'tspan') {
+			var text = child.childNodes[0].textContent;
+			var obj = tryParseDict(text);
+			if (obj) return obj;
+		}
+	}
 
-    return undefined
+	return undefined
 }
 
 /** Function to handle JessyInk elements.
@@ -1121,9 +1121,9 @@ function jessyInkInit()
 			else if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;) &amp;&amp; nodes[counter].getAttributeNS(NSS[&quot;jessyink&quot;], &quot;presentationLayer&quot;) == &quot;presentationLayer&quot;)
 				existingJessyInkPresentationLayer = nodes[counter];
 			else if (nodes[counter].getAttributeNS(NSS[&quot;inkscape&quot;], &quot;label&quot;).substring(0,1) == '_') {
-                console.log('found special layer; hiding...');
-                nodes[counter].setAttribute('style','display:none');
-            } else
+				console.log('found special layer; hiding...');
+				nodes[counter].setAttribute('style','display:none');
+			} else
 				tempSlides.push(nodes[counter].getAttribute(&quot;id&quot;));
 		}
 		else if (nodes[counter].getAttributeNS(NSS['jessyink'], 'element'))
@@ -1303,11 +1303,17 @@ function jessyInkInit()
 			{
 				console.log('found obj=' + obj);
 				var id= candidates[i].getAttribute('id');
-				var effectDict= { effect:'appear',dir:1,element:candidates[i],order:obj.order,options:{} };
-				for(var key in obj)
-					effectDict.options[key] = obj[key];
+				var effectDict= { 
+					dir:1,
+					element:candidates[i],
+					order:obj.order,
+					effect:obj.name || 'appear',
+					options:obj,
+				};
 
-				if (!tempEffects[obj.order])tempEffects[obj.order]= new Array();
+				if (!tempEffects[obj.order])
+					tempEffects[obj.order]= new Array();
+
 				tempEffects[obj.order].push( effectDict );
 			}
 		}
@@ -2775,21 +2781,21 @@ function padString(str, len)
  * @return like {order:2,name:value,name2:value2} or undefined
  */
 function tryParseDict(label) {
-    var i1= label.indexOf('{{');
-    var i2= label.indexOf('}}');
-    if (i1==-1 || i2==-1) return undefined;
-    var list = label.substr(i1+2,i2-(i1+2)).split(';');
-    var ret= new Object();
+	var i1= label.indexOf('{{');
+		var i2= label.indexOf('}}');
+	if (i1==-1 || i2==-1) return undefined;
+	var list = label.substr(i1+2,i2-(i1+2)).split(';');
+	var ret= new Object();
 
-    for(var i=0; i&lt;list.length; i++) {
-        var j= list[i].indexOf(':');
-        if (j==-1)
-            ret.order = list[i];
-        else
-            ret[list[i].substr(0,j)] = list[i].substr(j+1);
-    }
+	for(var i=0; i&lt;list.length; i++) {
+		var j= list[i].indexOf(':');
+		if (j==-1)
+			ret.order = list[i];
+		else
+			ret[list[i].substr(0,j)] = list[i].substr(j+1);
+	}
 
-    return ret;
+	return ret;
 }
 
 /** Convenience function to translate a attribute string into a dictionary.
@@ -2943,12 +2949,12 @@ String.prototype.trim = function()
          sodipodi:linespacing="125%"
          id="text2992-6"
          y="367.96432"
-         x="-241.31841"
+         x="1309.0559"
          style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Helvetica"
          xml:space="preserve"><tspan
            style="font-size:60px;font-weight:normal;fill:#ff0000;-inkscape-font-specification:Sans"
            y="367.96432"
-           x="-241.31841"
+           x="1309.0559"
            id="tspan2994-2"
            sodipodi:role="line">{{1}}</tspan></text>
     </g>
@@ -2980,27 +2986,38 @@ String.prototype.trim = function()
              x="252.37071"
              y="302.62311"
              style="font-size:60px;font-weight:bold;-inkscape-font-specification:Sans Bold">item 2</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3251"
+           y="450.61929"
+           x="217.03683"
+           style="font-size:10px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Sans Italic"
+           xml:space="preserve"><tspan
+             style="font-size:60px;font-style:italic;font-weight:normal;-inkscape-font-specification:Sans Italic"
+             y="450.61929"
+             x="217.03683"
+             id="tspan3253"
+             sodipodi:role="line">fading</tspan></text>
       </g>
       <text
-         transform="translate(0,166.98308)"
          sodipodi:linespacing="125%"
          id="text2992-6-7"
-         y="367.96432"
-         x="-241.31841"
+         y="534.94739"
+         x="1309.0559"
          style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Helvetica"
          xml:space="preserve"><tspan
            style="font-size:60px;font-weight:normal;fill:#ff0000;-inkscape-font-specification:Sans"
-           y="367.96432"
-           x="-241.31841"
+           y="534.94739"
+           x="1309.0559"
            id="tspan2994-2-5"
-           sodipodi:role="line">{{2}}</tspan></text>
+           sodipodi:role="line">{{2;name:fade;length:500}}</tspan></text>
     </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="layer 2"
-     style="display:none">
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Helvetica"
@@ -3017,7 +3034,8 @@ String.prototype.trim = function()
   <g
      inkscape:groupmode="layer"
      id="layer4"
-     inkscape:label="_hidden_layer">
+     inkscape:label="_hidden_layer"
+     style="display:none">
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Helvetica"

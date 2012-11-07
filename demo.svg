@@ -24,17 +24,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.584375"
+     inkscape:zoom="0.2921875"
      inkscape:cx="640"
      inkscape:cy="480"
      inkscape:document-units="px"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:window-width="1440"
      inkscape:window-height="782"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="0" />
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata3105">
     <rdf:RDF>
@@ -51,7 +51,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="layer 1"
-     style="display:none">
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Helvetica"
@@ -141,12 +141,12 @@
          sodipodi:linespacing="125%"
          id="text2992-6"
          y="367.96432"
-         x="-241.31841"
+         x="1309.0559"
          style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Helvetica"
          xml:space="preserve"><tspan
            style="font-size:60px;font-weight:normal;fill:#ff0000;-inkscape-font-specification:Sans"
            y="367.96432"
-           x="-241.31841"
+           x="1309.0559"
            id="tspan2994-2"
            sodipodi:role="line">{{1}}</tspan></text>
     </g>
@@ -178,27 +178,38 @@
              x="252.37071"
              y="302.62311"
              style="font-size:60px;font-weight:bold;-inkscape-font-specification:Sans Bold">item 2</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3251"
+           y="450.61929"
+           x="217.03683"
+           style="font-size:10px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Sans Italic"
+           xml:space="preserve"><tspan
+             style="font-size:60px;font-style:italic;font-weight:normal;-inkscape-font-specification:Sans Italic"
+             y="450.61929"
+             x="217.03683"
+             id="tspan3253"
+             sodipodi:role="line">fading</tspan></text>
       </g>
       <text
-         transform="translate(0,166.98308)"
          sodipodi:linespacing="125%"
          id="text2992-6-7"
-         y="367.96432"
-         x="-241.31841"
+         y="534.94739"
+         x="1309.0559"
          style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Helvetica"
          xml:space="preserve"><tspan
            style="font-size:60px;font-weight:normal;fill:#ff0000;-inkscape-font-specification:Sans"
-           y="367.96432"
-           x="-241.31841"
+           y="534.94739"
+           x="1309.0559"
            id="tspan2994-2-5"
-           sodipodi:role="line">{{2}}</tspan></text>
+           sodipodi:role="line">{{2;name:fade;length:500}}</tspan></text>
     </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="layer 2"
-     style="display:none">
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Helvetica"
@@ -215,7 +226,8 @@
   <g
      inkscape:groupmode="layer"
      id="layer4"
-     inkscape:label="_hidden_layer">
+     inkscape:label="_hidden_layer"
+     style="display:none">
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans;-inkscape-font-specification:Helvetica"
