@@ -1,8 +1,8 @@
 jessyink-hackish
 ================
 
-fork of the [https://code.launchpad.net/jessyink/](launchpad jessyink project). jessyink adds
-some javascript to a .SVG file created in [http://inkscape.org](inkscape) to create layer
+fork of the [launchpad jessyink project](https://code.launchpad.net/jessyink/). jessyink adds
+some javascript to a .SVG file created in [inkscape](http://inkscape.org) to create layer
 based presentations that can be displayed directly by any modern web browser.
 
 in the original implementation, the adding of effects implies running an external python script
