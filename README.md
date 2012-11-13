@@ -9,4 +9,4 @@ in the original implementation, the adding of effects implies running an externa
 that reparses the entire presentation every time. this fork uses magic `{{...}}` strings
 directly included in the presentation that encode the effects.
 
-open `build/demo.svg` in your browser for a simple demonstratin
+open `build/demo.svg` in your browser for a simple demonstration
