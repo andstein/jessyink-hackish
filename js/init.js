@@ -75,6 +75,8 @@ function jessyInkInit()
 	// Making a list of the slide and finding the master slide.
 	var nodes = document.getElementsByTagNameNS(NSS["svg"], "g");
 	var tempSlides = new Array();
+	var masterSlides = new Array();
+	var masterSlidePositions = new Array();
 	var existingJessyInkPresentationLayer = null;
 
 	for (var counter = 0; counter < nodes.length; counter++)
@@ -85,16 +87,20 @@ function jessyInkInit()
 				masterSlide = nodes[counter];
 			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label") && nodes[counter].getAttributeNS(NSS["jessyink"], "presentationLayer") == "presentationLayer")
 				existingJessyInkPresentationLayer = nodes[counter];
-			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label").substring(0,1) == '_')
+			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label").substring(0,1) == '~')
 				nodes[counter].setAttribute('style','display:none');
-			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label").substring(0,1) == '!')
-				masterSlide = nodes[counter];
-			else
+			else if (nodes[counter].getAttributeNS(NSS["inkscape"], "label").substring(0,1) == '_') {
+				masterSlides.push( nodes[counter] );
+				masterSlidePositions.push( tempSlides.length );
+			} else
 				tempSlides.push(nodes[counter].getAttribute("id"));
 		}
 		else if (nodes[counter].getAttributeNS(NSS['jessyink'], 'element'))
 			handleElement(nodes[counter]);
 	}
+
+	for (var i = 0; i < masterSlides.length; i++)
+		masterSlides[i].style.display = "none";
 
 	// Hide master slide set default transitions.
 	if (masterSlide)
@@ -187,6 +193,21 @@ function jessyInkInit()
 			clonedNode.style.display = "inherit";
 
 			node.insertBefore(clonedNode, node.firstChild);
+		}
+
+        // clone master slide layers
+		if (masterSlides.length)
+		{
+			for( var i = masterSlides.length-1; i >= 0; i--)
+				if (masterSlidePositions[i] <= counter) 
+				{
+					var clonedNode = suffixNodeIds(masterSlides[i].cloneNode(true), "_" + counter);
+					clonedNode.removeAttributeNS(NSS["inkscape"], "groupmode");
+					clonedNode.removeAttributeNS(NSS["inkscape"], "label");
+					clonedNode.style.display = "inherit";
+
+					node.insertBefore(clonedNode, node.firstChild);
+				}
 		}
 
 		// Setting clip path.
